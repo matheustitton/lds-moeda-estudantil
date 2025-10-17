@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "empresa_filiada")
+@Table(name = "empresa_parceira")
 @Getter
-public class EmpresaFiliada extends Usuario {
+public class EmpresaParceira extends Usuario {
 
     @Column(nullable = false, unique = true, length = 14)
     protected String cnpj;
@@ -15,11 +15,11 @@ public class EmpresaFiliada extends Usuario {
     @Column(name = "razao_social", nullable = false, length = 100)
     protected String razaoSocial;
 
-    public EmpresaFiliada() {
+    public EmpresaParceira() {
         super();
     }
 
-    public EmpresaFiliada(String cnpj, String razaoSocial, String email, String senha) {
+    public EmpresaParceira(String cnpj, String razaoSocial, String email, String senha) {
         super(email, senha, ETipoUsuario.EMPRESA_PARCEIRA);
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;

@@ -10,29 +10,29 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.moeda.estudantil.dto.empresaFiliada.EmpresaFiliadaCreateRequestDTO;
-import com.moeda.estudantil.dto.empresaFiliada.EmpresaFiliadaResponseDTO;
-import com.moeda.estudantil.service.EmpresaFiliadaService;
+import com.moeda.estudantil.dto.empresa_parceira.EmpresaParceiraCreateRequestDTO;
+import com.moeda.estudantil.dto.empresa_parceira.EmpresaParceiraResponseDTO;
+import com.moeda.estudantil.service.EmpresaParceiraService;
 
 @Controller
-@RequestMapping("/api/empresas-filiadas")
-public class EmpresaFiliadaController {
+@RequestMapping("/api/empresas-parceiras")
+public class EmpresaParceiraController {
 
-    private final EmpresaFiliadaService empresaFiliadaService;
+    private final EmpresaParceiraService empresaFiliadaService;
 
-    public EmpresaFiliadaController(EmpresaFiliadaService empresaFiliadaService) {
+    public EmpresaParceiraController(EmpresaParceiraService empresaFiliadaService) {
         this.empresaFiliadaService = empresaFiliadaService;
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody EmpresaFiliadaCreateRequestDTO empresaFiliadaCreateRequestDTO) {
+    public ResponseEntity<Void> create(@RequestBody EmpresaParceiraCreateRequestDTO empresaFiliadaCreateRequestDTO) {
         empresaFiliadaService.create(empresaFiliadaCreateRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmpresaFiliadaResponseDTO> update(Long id, @RequestBody EmpresaFiliadaCreateRequestDTO empresaFiliadaCreateRequestDTO) {
-        EmpresaFiliadaResponseDTO updated = empresaFiliadaService.update(id, empresaFiliadaCreateRequestDTO);
+    public ResponseEntity<EmpresaParceiraResponseDTO> update(Long id, @RequestBody EmpresaParceiraCreateRequestDTO empresaFiliadaCreateRequestDTO) {
+        EmpresaParceiraResponseDTO updated = empresaFiliadaService.update(id, empresaFiliadaCreateRequestDTO);
         if (updated == null) {
             return ResponseEntity.notFound().build();
         }
@@ -40,8 +40,8 @@ public class EmpresaFiliadaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmpresaFiliadaResponseDTO> delete(Long id) {
-        EmpresaFiliadaResponseDTO deleted = empresaFiliadaService.delete(id);
+    public ResponseEntity<EmpresaParceiraResponseDTO> delete(Long id) {
+        EmpresaParceiraResponseDTO deleted = empresaFiliadaService.delete(id);
         if (deleted == null) {
             return ResponseEntity.notFound().build();
         }
@@ -49,14 +49,14 @@ public class EmpresaFiliadaController {
     }
 
     @GetMapping
-    public ResponseEntity<EmpresaFiliadaResponseDTO[]> findAll() {
-        EmpresaFiliadaResponseDTO[] empresas = empresaFiliadaService.findAll();
+    public ResponseEntity<EmpresaParceiraResponseDTO[]> findAll() {
+        EmpresaParceiraResponseDTO[] empresas = empresaFiliadaService.findAll();
         return ResponseEntity.ok(empresas);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmpresaFiliadaResponseDTO> findById(Long id) {
-        EmpresaFiliadaResponseDTO empresa = empresaFiliadaService.findById(id);
+    public ResponseEntity<EmpresaParceiraResponseDTO> findById(Long id) {
+        EmpresaParceiraResponseDTO empresa = empresaFiliadaService.findById(id);
         if (empresa == null) {
             return ResponseEntity.notFound().build();
         }

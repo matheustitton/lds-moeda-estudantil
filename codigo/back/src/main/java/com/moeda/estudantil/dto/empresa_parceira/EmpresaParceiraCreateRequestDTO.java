@@ -1,9 +1,9 @@
-package com.moeda.estudantil.dto.empresaFiliada;
+package com.moeda.estudantil.dto.empresa_parceira;
 
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CNPJ;
 
-public record EmpresaFiliadaCreateRequestDTO(
+public record EmpresaParceiraCreateRequestDTO(
 
         @NotBlank(message = "O CNPJ é obrigatório.")
         @CNPJ

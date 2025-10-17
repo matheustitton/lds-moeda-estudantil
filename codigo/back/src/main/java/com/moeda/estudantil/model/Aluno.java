@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "alunos")
+@Table(name = "aluno")
 public class Aluno extends Usuario {
 
     @Column(nullable = false, length = 150)
