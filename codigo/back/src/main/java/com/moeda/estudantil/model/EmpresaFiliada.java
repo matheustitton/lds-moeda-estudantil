@@ -1,35 +1,27 @@
 package com.moeda.estudantil.model;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
+import com.moeda.estudantil.enums.ETipoUsuario;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Table(name = "empresa_filiada")
 @Getter
-public class EmpresaFiliada extends Juridica {
+public class EmpresaFiliada extends Usuario {
 
-    public EmpresaFiliada(String cnpj, String razaoSocial) {
-        super(cnpj, razaoSocial);
-    }
+    @Column(nullable = false, unique = true, length = 14)
+    protected String cnpj;
+
+    @Column(name = "razao_social", nullable = false, length = 100)
+    protected String razaoSocial;
 
     public EmpresaFiliada() {
-        super("", "");
+        super();
     }
 
-    public Long getId() {
-        return id;
+    public EmpresaFiliada(String cnpj, String razaoSocial, String email, String senha) {
+        super(email, senha, ETipoUsuario.EMPRESA_PARCEIRA);
+        this.cnpj = cnpj;
+        this.razaoSocial = razaoSocial;
     }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public String getRazaoSocial() {
-        return razaoSocial;
-    }
-
 }

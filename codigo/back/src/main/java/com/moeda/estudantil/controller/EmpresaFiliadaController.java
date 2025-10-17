@@ -15,7 +15,7 @@ import com.moeda.estudantil.dto.empresaFiliada.EmpresaFiliadaResponseDTO;
 import com.moeda.estudantil.service.EmpresaFiliadaService;
 
 @Controller
-@RequestMapping("/api/empresas")
+@RequestMapping("/api/empresas-filiadas")
 public class EmpresaFiliadaController {
 
     private final EmpresaFiliadaService empresaFiliadaService;
@@ -25,12 +25,9 @@ public class EmpresaFiliadaController {
     }
 
     @PostMapping
-    public ResponseEntity<EmpresaFiliadaResponseDTO> create(@RequestBody EmpresaFiliadaCreateRequestDTO empresaFiliadaCreateRequestDTO) {
-        EmpresaFiliadaResponseDTO created = empresaFiliadaService.create(empresaFiliadaCreateRequestDTO);
-        if (created == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<Void> create(@RequestBody EmpresaFiliadaCreateRequestDTO empresaFiliadaCreateRequestDTO) {
+        empresaFiliadaService.create(empresaFiliadaCreateRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
