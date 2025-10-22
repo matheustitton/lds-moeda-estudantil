@@ -5,19 +5,19 @@ import jakarta.validation.constraints.NotNull;
 
 public record AlunoUpdateRequestDTO(
 
-        @NotBlank(message = "O nome é obrigatório.")
-        String nome,
+    @NotBlank(message = "O nome é obrigatório.")
+    String nome,
 
-        @NotBlank(message = "O curso é obrigatório.")
-        String curso,
+    @NotBlank(message = "O curso é obrigatório.")
+    String curso,
 
-        @NotNull(message = "A instituição de ensino é obrigatória.")
-        Long instituicaoEnsino,
+    @NotNull(message = "A instituição de ensino é obrigatória.")
+    Long instituicaoEnsino,
 
-        @NotBlank(message = "O e-mail é obrigatório.")
-        String email,
+    @NotBlank(message = "O e-mail é obrigatório.")
+    String email,
 
-        @NotBlank(message = "A senha é obrigatória.")
-        String senha
+    @NotBlank(message = "A senha é obrigatória.")
+    String senha
 ) {
 }

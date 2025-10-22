@@ -1,13 +1,13 @@
 package com.moeda.estudantil.service;
 
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.moeda.estudantil.dto.empresa_parceira.EmpresaParceiraCreateRequestDTO;
 import com.moeda.estudantil.dto.empresa_parceira.EmpresaParceiraResponseDTO;
 import com.moeda.estudantil.model.EmpresaParceira;
 import com.moeda.estudantil.repository.EmpresaParceiraRepository;
+import com.moeda.estudantil.util.CriptografiaUtil;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -15,11 +15,8 @@ public class EmpresaParceiraService {
 
     private final EmpresaParceiraRepository empresaFiliadaRepository;
 
-    private BCryptPasswordEncoder passwordEncoder;
-
-    public EmpresaParceiraService(EmpresaParceiraRepository empresaFiliadaRepository, BCryptPasswordEncoder passwordEncoder) {
+    public EmpresaParceiraService(EmpresaParceiraRepository empresaFiliadaRepository) {
         this.empresaFiliadaRepository = empresaFiliadaRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public EmpresaParceiraResponseDTO findById(Long id) {
@@ -33,13 +30,10 @@ public class EmpresaParceiraService {
 
     @Transactional
     public void create(EmpresaParceiraCreateRequestDTO dto) {
-        try {
-            String senhaCriptografada = passwordEncoder.encode(dto.senha());
-            EmpresaParceira empresa = new EmpresaParceira(dto.cnpj(), dto.razaoSocial(), dto.email(), senhaCriptografada);
-            empresaFiliadaRepository.save(empresa);
-        } catch (ConstraintViolationException cve) {
-            throw new RuntimeException("CNPJ ou E-mail já cadastrado.");
-        }
+        String senhaCriptografada = CriptografiaUtil.criptografar(dto.senha());
+        EmpresaParceira empresa = new EmpresaParceira(dto.cnpj(), dto.razaoSocial(), dto.email(), senhaCriptografada);
+
+        empresaFiliadaRepository.save(empresa);
     }
 
     public EmpresaParceiraResponseDTO update(Long id, EmpresaParceiraCreateRequestDTO empresaFiliadaCreateRequestDTO) {

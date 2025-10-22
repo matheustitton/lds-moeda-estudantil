@@ -3,6 +3,8 @@ package com.moeda.estudantil.model;
 import com.moeda.estudantil.enums.ETipoUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
@@ -13,12 +15,14 @@ public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    private Long id;
+    protected Long id;
 
     @Column(nullable = false, unique = true, length = 100)
-    private String email;
+    @Setter
+    protected String email;
 
     @Column(nullable = false, length = 128)
+    @Setter
     private String senha;
 
     @Column(name = "tipo_usuario", nullable = false)
