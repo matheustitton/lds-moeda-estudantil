@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import Image from "next/image";
 import { LoginRequisicao } from "@/server/Login";
+import { Utils } from "@/lib/utils/utils";
 
 const loginSchema = z.object({
   email: z.string().min(1, { message: "Informe o e-mail." }),
@@ -22,6 +23,8 @@ const loginSchema = z.object({
 type FormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
+  const { buscarTokenAcesso, limparTodos } = Utils.Sessao;
+  
   const form = useForm<FormData>({
     mode: "onTouched",
     resolver: zodResolver(loginSchema),
@@ -32,6 +35,9 @@ export default function Login() {
   });
 
   const handleSubmit = async (values: FormData) => {
+    const token = buscarTokenAcesso();
+    if (token) limparTodos();
+
     try {
       const response = await LoginRequisicao.Login(values);
 
