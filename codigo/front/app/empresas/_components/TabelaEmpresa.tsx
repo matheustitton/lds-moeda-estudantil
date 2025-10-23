@@ -8,10 +8,13 @@ import { ArrowUpDown } from 'lucide-react'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import api from '@/lib/axios'
 import { BsThreeDots } from 'react-icons/bs'
+import { EmpresaRequisicao } from '@/server/Empresa'
+import { EmpresaParceira } from '@/types/Empresa/empresa.response'
+import { queryClient } from '@/app/_components/QueryClientProvider'
 
 export default function TabelaEmpresas() {
   // Query para buscar todas as empresas
-  const { data, refetch } = useQuery<any[]>({
+  const { data, refetch } = useQuery<EmpresaParceira[]>({
     queryKey: ['empresas'],
     queryFn: async () => {
       const response = await api.get('http://localhost:8080/api/empresas-parceiras')
@@ -50,7 +53,32 @@ export default function TabelaEmpresas() {
         </Button>
       ),
       cell: ({ row }) => <div>{row.original.razaoSocial}</div>,
-    }
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 !p-2">
+              <BsThreeDots />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+                variant="destructive"
+              onClick={async (e) => {
+                e.stopPropagation()
+                await EmpresaRequisicao.Excluir(row.original.id)
+                queryClient.invalidateQueries({queryKey: ['empresas']});
+              }}
+            >
+              Excluir
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
   ]
 
   return (
