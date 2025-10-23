@@ -15,5 +15,3 @@ const ReactQueryProvider = ({ children }: { children: ReactNode }) => {
 }
 
 export default ReactQueryProvider
-
-export const queryClient = useQueryClient()
