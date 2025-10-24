@@ -24,7 +24,7 @@ type FormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const { buscarTokenAcesso, limparTodos } = Utils.Sessao;
-  
+
   const form = useForm<FormData>({
     mode: "onTouched",
     resolver: zodResolver(loginSchema),
@@ -42,21 +42,34 @@ export default function Login() {
       const response = await LoginRequisicao.Login(values);
 
       if (response.statusCode === 201 || response.statusCode === 200) {
-        alert('Login realizado com sucesso!')
-        form.reset()
+        alert("Login realizado com sucesso!");
+        form.reset();
       }
     } catch (error) {
-      console.error(error)
-      alert('Erro ao realizar login.')
+      console.error(error);
+      alert("Erro ao realizar login.");
     }
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-white">
       {/* Área do formulário */}
-      <div className="flex w-full md:w-2/5 items-center justify-center p-10">
-        <div className="flex flex-col w-full max-w-md">
-          <h1 className="text-4xl font-bold mb-8 text-center">Bem-vindo</h1>
+      <div className="flex w-full md:w-2/5 items-center justify-center p-10 bg-white shadow-lg">
+        <div className="flex flex-col w-full max-w-md bg-white p-8 rounded-2xl border border-gray-100">
+
+          <div className="items-center justify-center">
+            <Image
+              src="/logo.png"
+              alt="Logo da Aplicação"
+              width={150}
+              height={150}
+              className="mx-auto mb-4 border-2 border-gray-100 rounded-full"
+            />
+          </div>
+
+          <h1 className="text-4xl font-bold mb-8 text-center text-[#1E3A8A]">
+            Bem-vindo
+          </h1>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}
@@ -72,7 +85,7 @@ export default function Login() {
                         value={String(field.value)}
                         onChange={field.onChange}
                         placeholder="Email"
-                        className="h-12 text-lg"
+                        className="h-12 text-lg border-2 border-gray-200 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] rounded-xl"
                       />
                     </FormControl>
                     <FormMessage />
@@ -90,7 +103,7 @@ export default function Login() {
                         onChange={field.onChange}
                         type="password"
                         placeholder="Senha"
-                        className="h-12 text-lg"
+                        className="h-12 text-lg border-2 border-gray-200 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] rounded-xl"
                       />
                     </FormControl>
                     <FormMessage />
@@ -99,7 +112,7 @@ export default function Login() {
               />
 
               <div className="flex w-full justify-end">
-                <p className="text-sm underline text-gray-600 hover:text-gray-800 cursor-pointer">
+                <p className="text-sm underline text-[#7B1E3A] hover:text-[#1E3A8A] cursor-pointer">
                   Esqueceu a senha?
                 </p>
               </div>
@@ -107,7 +120,7 @@ export default function Login() {
               <Button
                 type="submit"
                 variant={"secondary"}
-                className="w-full py-6 text-lg font-semibold"
+                className="w-full py-6 text-lg font-semibold bg-[#1E3A8A] hover:bg-[#7B1E3A] text-white rounded-xl transition-colors"
               >
                 Entrar
               </Button>
@@ -117,14 +130,23 @@ export default function Login() {
       </div>
 
       {/* Área da imagem */}
-      <div className="hidden md:flex w-3/5 items-center justify-center overflow-hidden relative">
+      <div className="hidden md:flex w-3/5 items-center justify-center overflow-hidden relative bg-[#1E3A8A]">
+        <div className="absolute inset-0 bg-[#1E3A8A]/40 z-10" />
         <Image
           src="/wp.png"
           alt="Ilustração de login"
           fill
-          className="object-cover"
+          className="object-cover opacity-100"
           priority
         />
+        <div className="absolute z-20 text-white text-center px-10">
+          <h2 className="text-3xl font-semibold mb-4">
+            EducaCoins
+          </h2>
+          <p className="text-lg text-gray-100">
+            Reconhecendo o mérito de quem se dedica: cada conquista vale uma recompensa.
+          </p>
+        </div>
       </div>
     </div>
   );
