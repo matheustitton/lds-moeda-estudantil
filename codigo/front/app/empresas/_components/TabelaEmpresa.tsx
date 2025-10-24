@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/ui/data-tables'
@@ -10,10 +10,11 @@ import api from '@/lib/axios'
 import { BsThreeDots } from 'react-icons/bs'
 import { EmpresaRequisicao } from '@/server/Empresa'
 import { EmpresaParceira } from '@/types/Empresa/empresa.response'
-import { queryClient } from '@/app/_components/QueryClientProvider'
 
 export default function TabelaEmpresas() {
-  // Query para buscar todas as empresas
+
+  const queryClient = useQueryClient();
+
   const { data, refetch } = useQuery<EmpresaParceira[]>({
     queryKey: ['empresas'],
     queryFn: async () => {
