@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button'
 import { TipoUsuario } from '@/types/Usuario/usuario.request'
 import api from '@/lib/axios'
+import { InstituicaoEnsinoResponse } from '@/types/Instituicao/instituicao.response'
 
 const alunoSchema = z.object({
   nome: z.string().min(1, { message: 'Informe o nome.' }),
@@ -183,7 +184,7 @@ export default function FormAluno() {
                     <SelectValue placeholder="Selecione a instituição" />
                   </SelectTrigger>
                   <SelectContent>
-                    {instituicoes?.map((inst: any) => (
+                    {instituicoes?.map((inst: InstituicaoEnsinoResponse) => (
                       <SelectItem key={inst.id} value={inst.id.toString()}>
                         {inst.nome}
                       </SelectItem>

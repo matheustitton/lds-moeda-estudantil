@@ -10,49 +10,61 @@ import api from '@/lib/axios'
 import { BsThreeDots } from 'react-icons/bs'
 import { EmpresaRequisicao } from '@/server/Empresa'
 import { EmpresaParceira } from '@/types/Empresa/empresa.response'
+import { AlunoResponse } from '@/types/Usuario/usuario.response'
+import { AlunoRequisicao } from '@/server/Aluno'
 
-export default function TabelaEmpresas() {
+export default function TabelaAlunos() {
   const queryClient = useQueryClient()
 
-  const { data, refetch } = useQuery<EmpresaParceira[]>({
-    queryKey: ['empresas'],
+  const { data, refetch } = useQuery<AlunoResponse[]>({
+    queryKey: ['alunos'],
     queryFn: async () => {
-      const response = await api.get('http://localhost:8080/api/empresas-parceiras')
-      return response.data
+      const response = await AlunoRequisicao.BuscarTodos()
+      return response.data ?? []
     }
   })
 
   // Definição das colunas
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<AlunoResponse>[] = [
     {
-      accessorKey: 'id',
+      accessorKey: 'aluno',
       header: ({ column }) => (
         <Button variant="ghost" className="!p-0" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          ID
+          Aluno
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => <div>{row.original.id}</div>,
+      cell: ({ row }) => <div>{row.original.nome}</div>,
     },
     {
-      accessorKey: 'cnpj',
+      accessorKey: 'curso',
       header: ({ column }) => (
         <Button variant="ghost" className="!p-0" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          CNPJ
+          Curso
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => <div>{row.original.cnpj}</div>,
+      cell: ({ row }) => <div>{row.original.curso}</div>,
     },
     {
-      accessorKey: 'razaoSocial',
+      accessorKey: 'instituicao',
       header: ({ column }) => (
         <Button variant="ghost" className="!p-0" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Razão Social
+          Instituição
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => <div>{row.original.razaoSocial}</div>,
+      cell: ({ row }) => <div>{row.original.instituicao.nome}</div>,
+    },
+    {
+      accessorKey: 'saldo',
+      header: ({ column }) => (
+        <Button variant="ghost" className="!p-0" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Instituição
+          <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => <div>{row.original.saldo}</div>,
     },
     {
       id: "actions",
@@ -69,8 +81,8 @@ export default function TabelaEmpresas() {
                 variant="destructive"
               onClick={async (e) => {
                 e.stopPropagation()
-                await EmpresaRequisicao.Excluir(row.original.id)
-                queryClient.invalidateQueries({queryKey: ['empresas']});
+                // await EmpresaRequisicao.Excluir(row.original.id)
+                // queryClient.invalidateQueries({queryKey: ['empresas']});
               }}
             >
               Excluir
