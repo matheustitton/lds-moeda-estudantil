@@ -40,12 +40,14 @@ export default function FormEmpresaParceira({ onVoltarLogin }: { onVoltarLogin: 
 
       if (response.status === 201 || response.status === 200) {
         queryClient.invalidateQueries({ queryKey: ['empresas'] })
-        toast.success('Empresa cadastrada com sucesso!')
+        toast.success("Cadastro realizado com sucesso! Agora você pode fazer login.");
         form.reset()
+        onVoltarLogin()
+      } else {
+        toast.error("E-mail ou CNPJ já cadastrado.");
       }
     } catch (error) {
       console.error(error)
-      alert('Erro ao cadastrar empresa.')
     }
   }
 

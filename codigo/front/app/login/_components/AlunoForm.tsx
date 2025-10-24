@@ -12,6 +12,7 @@ import api from '@/lib/axios'
 import { InstituicaoEnsinoResponse } from '@/types/Instituicao/instituicao.response'
 import { useRouter } from 'next/navigation'
 import { TipoUsuario } from '@/types/Usuario/enum'
+import { toast } from 'sonner'
 
 export const alunoSchema = z.object({
   nome: z.string().min(1, { message: 'Informe o nome.' }),
@@ -63,12 +64,14 @@ export default function FormAluno({ onVoltarLogin }: { onVoltarLogin: () => void
 
       if (response.status === 201 || response.status === 200) {
         queryClient.invalidateQueries({ queryKey: ['usuarios'] })
+        toast.success("Cadastro realizado com sucesso! Agora você pode fazer login.");
         form.reset()
-        router.push('/login')
+        onVoltarLogin()
+      } else {
+        toast.error("E-mail ou CPF já cadastrado.");
       }
     } catch (error) {
       console.error(error)
-      alert('Erro ao cadastrar aluno.')
     }
   }
 

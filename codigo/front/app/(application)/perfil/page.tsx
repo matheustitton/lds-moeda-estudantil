@@ -141,7 +141,7 @@ export default function PerfilAluno() {
                     <FormControl>
                       <Input
                         {...field}
-                        value={(usuario as AlunoResponse).instituicao.nome || ''}
+                        value={(usuario as AlunoResponse).instituicao?.nome || ''}
                         readOnly
                         className="h-12 text-lg border-2 border-gray-200 rounded-xl bg-gray-100"
                       />
