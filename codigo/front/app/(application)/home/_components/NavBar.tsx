@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import router from "next/router";
 
 export default function Navbar() {
     return (
