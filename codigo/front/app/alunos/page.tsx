@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import FormAluno from "./_components/UsuarioForm";
+import FormAluno from "./_components/AlunoForm";
 
 export default function Usuarios() {
   return (
