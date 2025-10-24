@@ -8,6 +8,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import api from '@/lib/axios'
+import { toast } from 'sonner'
 
 const empresaSchema = z.object({
   cnpj: z.string().min(1, { message: 'O CNPJ é obrigatório.' }),
@@ -39,7 +40,7 @@ export default function FormEmpresaParceira() {
 
       if (response.status === 201 || response.status === 200) {
         queryClient.invalidateQueries({ queryKey: ['empresas'] })
-        alert('Empresa cadastrada com sucesso!')
+        toast.success('Empresa cadastrada com sucesso!')
         form.reset()
       }
     } catch (error) {
@@ -57,7 +58,6 @@ export default function FormEmpresaParceira() {
       >
         <h1 className="font-bold text-2xl">Cadastro de Empresa Parceira</h1>
 
-        {/* CNPJ */}
         <FormField
           control={form.control}
           name="cnpj"
@@ -72,7 +72,6 @@ export default function FormEmpresaParceira() {
           )}
         />
 
-        {/* Razão Social */}
         <FormField
           control={form.control}
           name="razaoSocial"
@@ -87,7 +86,6 @@ export default function FormEmpresaParceira() {
           )}
         />
 
-        {/* Email */}
         <FormField
           control={form.control}
           name="email"
@@ -102,7 +100,6 @@ export default function FormEmpresaParceira() {
           )}
         />
 
-        {/* Senha */}
         <FormField
           control={form.control}
           name="senha"

@@ -14,6 +14,8 @@ import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import Image from "next/image";
 import { LoginRequisicao } from "@/server/Login";
 import { Utils } from "@/lib/utils/utils";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z.string().min(1, { message: "Informe o e-mail." }),
@@ -24,6 +26,8 @@ type FormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const { buscarTokenAcesso, limparTodos } = Utils.Sessao;
+
+  const router = useRouter()
 
   const form = useForm<FormData>({
     mode: "onTouched",
@@ -42,12 +46,13 @@ export default function Login() {
       const response = await LoginRequisicao.Login(values);
 
       if (response.statusCode === 201 || response.statusCode === 200) {
-        alert("Login realizado com sucesso!");
+        router.push("/home")
+        toast.success("Login realizado com sucesso!");
         form.reset();
       }
     } catch (error) {
       console.error(error);
-      alert("Erro ao realizar login.");
+      toast.error("Erro ao realizar login.");
     }
   };
 
