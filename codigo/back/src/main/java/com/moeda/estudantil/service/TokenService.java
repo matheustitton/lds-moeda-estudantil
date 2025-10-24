@@ -27,6 +27,7 @@ public class TokenService {
                 .subject(usuario.getId().toString())
                 .issuedAt(agora)
                 .expiresAt(agora.plusSeconds(expiracao))
+                .claim("tipo", usuario.getTipoUsuario())
                 .build();
     }
 

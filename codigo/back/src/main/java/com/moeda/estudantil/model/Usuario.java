@@ -27,6 +27,7 @@ public abstract class Usuario {
 
     @Column(name = "tipo_usuario", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Getter
     private ETipoUsuario tipoUsuario;
 
     public Usuario() {
