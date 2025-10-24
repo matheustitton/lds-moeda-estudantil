@@ -17,11 +17,11 @@ import { Utils } from "@/lib/utils/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
-import AlunoForm from "@/app/alunos/_components/AlunoForm";
+import AlunoForm from "@/app/login/_components/AlunoForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import EmpresaForm from "@/app/empresas/_components/EmpresaForm";
+import EmpresaForm from "@/app/login/_components/EmpresaForm";
 
 const loginSchema = z.object({
   email: z.string().min(1, { message: "Informe o e-mail." }),
@@ -57,9 +57,14 @@ export default function Login() {
         toast.success("Login realizado com sucesso!");
         form.reset();
       }
+      else if (response.statusCode == 401){
+        toast.error("Erro ao realizar login. Verifique as credenciais informadas.");
+      }
+      else{
+        toast.error("Erro ao estabelecer conexão com o servidor.");
+      }
     } catch (error) {
-      console.error(error);
-      toast.error("Erro ao realizar login.");
+      console.error(error)
     }
   };
 

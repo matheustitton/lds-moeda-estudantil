@@ -8,10 +8,10 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { TipoUsuario } from '@/types/Usuario/usuario.request'
 import api from '@/lib/axios'
 import { InstituicaoEnsinoResponse } from '@/types/Instituicao/instituicao.response'
 import { useRouter } from 'next/navigation'
+import { TipoUsuario } from '@/types/Usuario/enum'
 
 const alunoSchema = z.object({
   nome: z.string().min(1, { message: 'Informe o nome.' }),

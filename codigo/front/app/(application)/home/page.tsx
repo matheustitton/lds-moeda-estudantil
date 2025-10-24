@@ -6,9 +6,7 @@ import Section from "./_components/SectionHolder";
 export default function Home() {
     return (
         <>
-            <Navbar />
             <Section />
-            <Footer />
         </>
     );
 }

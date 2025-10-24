@@ -1,8 +1,10 @@
+import { TipoUsuario } from "@/types/Usuario/enum";
 import { jwtDecode } from "jwt-decode";
 
 interface JwtPayload {
   sub: string;
   email: string;
+  tipo: TipoUsuario;
   nome: string;
   roles: string[];
   iat: number;

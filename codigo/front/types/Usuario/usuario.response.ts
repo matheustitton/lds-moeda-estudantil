@@ -9,3 +9,13 @@ export interface AlunoResponse {
     email: string
     instituicao: InstituicaoEnsinoResponse
 }
+
+export interface UsuarioResponse {
+    nome: string
+    rg: string
+    cpf: string
+    curso: string
+    saldo: number
+    email: string
+    instituicao: InstituicaoEnsinoResponse
+}
