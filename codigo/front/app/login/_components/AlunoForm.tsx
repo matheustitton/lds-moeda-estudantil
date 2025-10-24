@@ -13,7 +13,7 @@ import { InstituicaoEnsinoResponse } from '@/types/Instituicao/instituicao.respo
 import { useRouter } from 'next/navigation'
 import { TipoUsuario } from '@/types/Usuario/enum'
 
-const alunoSchema = z.object({
+export const alunoSchema = z.object({
   nome: z.string().min(1, { message: 'Informe o nome.' }),
   rg: z.string().min(1, { message: 'Informe o RG.' }),
   cpf: z.string().min(1, { message: 'Informe o CPF.' }),
