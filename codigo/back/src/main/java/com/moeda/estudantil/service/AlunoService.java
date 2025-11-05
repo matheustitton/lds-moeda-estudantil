@@ -6,8 +6,6 @@ import com.moeda.estudantil.dto.aluno.AlunoUpdateRequestDTO;
 import com.moeda.estudantil.dto.pontuacao.PontuacaoDTO;
 import com.moeda.estudantil.model.Aluno;
 import com.moeda.estudantil.model.InstituicaoEnsino;
-import com.moeda.estudantil.model.Pontuacao;
-import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.AlunoRepository;
 import com.moeda.estudantil.repository.InstituicaoEnsinoRepository;
 import com.moeda.estudantil.util.CriptografiaUtil;
