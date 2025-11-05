@@ -52,4 +52,5 @@ public class AlunoController {
         service.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

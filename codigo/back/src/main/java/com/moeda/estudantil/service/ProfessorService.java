@@ -6,8 +6,10 @@ import com.moeda.estudantil.dto.professor.ProfessorCreateRequestDTO;
 import com.moeda.estudantil.dto.professor.ProfessorDTO;
 import com.moeda.estudantil.dto.professor.ProfessorUpdateRequestDTO;
 import com.moeda.estudantil.model.InstituicaoEnsino;
+import com.moeda.estudantil.model.Pontuacao;
 import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.InstituicaoEnsinoRepository;
+import com.moeda.estudantil.repository.PontuacaoRepository;
 import com.moeda.estudantil.repository.ProfessorRepository;
 import com.moeda.estudantil.util.CriptografiaUtil;
 
@@ -17,12 +19,12 @@ import jakarta.transaction.Transactional;
 public class ProfessorService {
     private ProfessorRepository repository;
     private InstituicaoEnsinoRepository instituicaoEnsinoRepository;
-    //private TrancacaoRepository transacaoRepository;
+    private PontuacaoRepository pontuacaoRepository;
 
-    public ProfessorService(ProfessorRepository repository, InstituicaoEnsinoRepository instituicaoEnsinoRepository/*, TrancacaoRepository transacaoRepository*/) {
+    public ProfessorService(ProfessorRepository repository, InstituicaoEnsinoRepository instituicaoEnsinoRepository, PontuacaoRepository pontuacaoRepository) {
         this.repository = repository;
         this.instituicaoEnsinoRepository = instituicaoEnsinoRepository;
-        //this.transacaoRepository = transacaoRepository;
+        this.pontuacaoRepository = pontuacaoRepository;
     }
 
     private InstituicaoEnsino buscarInstituicaoEnsino(Long id) {
@@ -48,7 +50,7 @@ public class ProfessorService {
     }
 
     @Transactional
-    public void atualizar(Long id, ProfessorUpdateRequestDTO dto) {
+    public ProfessorDTO atualizar(Long id, ProfessorUpdateRequestDTO dto) {
         Professor professor = buscarPorId(id);
         InstituicaoEnsino instituicaoEnsino = buscarInstituicaoEnsino(dto.instituicaoEnsino());
         String senhaCriptografada = CriptografiaUtil.criptografar(dto.senha());
@@ -58,6 +60,9 @@ public class ProfessorService {
         professor.setInstituicao(instituicaoEnsino);
         professor.setEmail(dto.email());
         professor.setSenha(senhaCriptografada);
+        repository.save(professor);
+
+        return professor.toDto();
     }
 
     @Transactional
@@ -66,5 +71,24 @@ public class ProfessorService {
         repository.delete(professor);
     }
 
+    @Transactional
+    public void doarMoedas(Long doadorId, Pontuacao pontuacao) {
+        Professor doador = buscarPorId(doadorId);
+        if (doador.getSaldo() < pontuacao.getValor()) {
+            throw new RuntimeException("Saldo insuficiente para realizar a doação.");
+        }
+        if (pontuacao.getValor() <= 0) {
+            throw new RuntimeException("O valor da doação deve ser maior que zero.");
+        }
+        doador.adicionarTransacao(pontuacao);
+        repository.save(doador);
+    }
+
+    @Transactional
+    public void resetarSaldo(Long professorId) {
+        Professor professor = buscarPorId(professorId);
+        professor.setSaldo(professor.getMAX_PONTOS());
+        repository.save(professor);
+    }
 
 }

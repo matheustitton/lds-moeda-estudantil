@@ -1,5 +1,7 @@
 package com.moeda.estudantil.model;
 
+import java.util.List;
+
 import com.moeda.estudantil.dto.aluno.AlunoDTO;
 import com.moeda.estudantil.enums.ETipoUsuario;
 import jakarta.persistence.*;
@@ -31,7 +33,12 @@ public class Aluno extends Usuario {
     @Setter
     private InstituicaoEnsino instituicao;
 
+    @OneToMany(mappedBy = "recebedor", cascade = CascadeType.ALL)
+    @Getter @Setter
+    private List<Pontuacao> transacoes;
+
     @Column(nullable = false)
+    @Getter @Setter
     private int saldo;
 
     public Aluno() {
@@ -45,6 +52,8 @@ public class Aluno extends Usuario {
         this.cpf = cpf;
         this.curso = curso;
         this.instituicao = instituicao;
+        this.transacoes = List.of();
+        this.saldo = 0;
     }
 
     public AlunoDTO toDto() {
@@ -52,4 +61,13 @@ public class Aluno extends Usuario {
             id, nome, rg, cpf, curso, instituicao.toDto(), saldo, email
         );
     }
+
+    public void atualizarSaldo(int valor) {
+        this.saldo += valor;
+    }
+
+    public void adicionarTransacao(Pontuacao pontuacao) {
+        this.transacoes.add(pontuacao);
+    }
+
 }

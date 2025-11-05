@@ -3,8 +3,11 @@ package com.moeda.estudantil.service;
 import com.moeda.estudantil.dto.aluno.AlunoCreateRequestDTO;
 import com.moeda.estudantil.dto.aluno.AlunoDTO;
 import com.moeda.estudantil.dto.aluno.AlunoUpdateRequestDTO;
+import com.moeda.estudantil.dto.pontuacao.PontuacaoDTO;
 import com.moeda.estudantil.model.Aluno;
 import com.moeda.estudantil.model.InstituicaoEnsino;
+import com.moeda.estudantil.model.Pontuacao;
+import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.AlunoRepository;
 import com.moeda.estudantil.repository.InstituicaoEnsinoRepository;
 import com.moeda.estudantil.util.CriptografiaUtil;
@@ -66,4 +69,13 @@ public class AlunoService {
         Aluno aluno = buscarPorId(id);
         repository.delete(aluno);
     }
+
+    @Transactional
+    public int receberDoacao(Long recebedorId, PontuacaoDTO dto) {
+        Aluno recebedor = buscarPorId(recebedorId);
+        recebedor.atualizarSaldo(dto.valor());
+        repository.save(recebedor);
+        return recebedor.getSaldo();       
+    }
+
 }
