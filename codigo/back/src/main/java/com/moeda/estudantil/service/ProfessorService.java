@@ -9,7 +9,6 @@ import com.moeda.estudantil.model.InstituicaoEnsino;
 import com.moeda.estudantil.model.Pontuacao;
 import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.InstituicaoEnsinoRepository;
-import com.moeda.estudantil.repository.PontuacaoRepository;
 import com.moeda.estudantil.repository.ProfessorRepository;
 import com.moeda.estudantil.util.CriptografiaUtil;
 
@@ -19,12 +18,10 @@ import jakarta.transaction.Transactional;
 public class ProfessorService {
     private ProfessorRepository repository;
     private InstituicaoEnsinoRepository instituicaoEnsinoRepository;
-    private PontuacaoRepository pontuacaoRepository;
 
-    public ProfessorService(ProfessorRepository repository, InstituicaoEnsinoRepository instituicaoEnsinoRepository, PontuacaoRepository pontuacaoRepository) {
+    public ProfessorService(ProfessorRepository repository, InstituicaoEnsinoRepository instituicaoEnsinoRepository) {
         this.repository = repository;
         this.instituicaoEnsinoRepository = instituicaoEnsinoRepository;
-        this.pontuacaoRepository = pontuacaoRepository;
     }
 
     private InstituicaoEnsino buscarInstituicaoEnsino(Long id) {
