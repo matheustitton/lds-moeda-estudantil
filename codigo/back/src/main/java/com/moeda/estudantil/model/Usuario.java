@@ -18,7 +18,7 @@ public abstract class Usuario {
     protected Long id;
 
     @Column(nullable = false, unique = true, length = 100)
-    @Setter
+    @Setter @Getter
     protected String email;
 
     @Column(nullable = false, length = 128)

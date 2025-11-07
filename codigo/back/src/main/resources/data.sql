@@ -9,9 +9,9 @@ INSERT INTO instituicao_ensino (nome, cnpj) VALUES
 
 TRUNCATE TABLE usuario RESTART IDENTITY CASCADE;
 INSERT INTO usuario (email, senha, tipo_usuario) VALUES
-('professor.1@gmail.com', 'senha123', 'PROFESSOR'),
+('italovbsilva03@gmail.com', 'senha123', 'PROFESSOR'),
 ('professor.2@gmail.com', 'senha123', 'PROFESSOR'),
-('aluno.1@gmail.com', 'senha123', 'ALUNO'),
+('italo.vitorinobs@hotmail.com', 'senha123', 'ALUNO'),
 ('aluno.2@gmail.com', 'senha123', 'ALUNO');
 
 TRUNCATE TABLE professor RESTART IDENTITY CASCADE;

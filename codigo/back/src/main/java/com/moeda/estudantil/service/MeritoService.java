@@ -7,19 +7,24 @@ import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.AlunoRepository;
 import com.moeda.estudantil.repository.MeritoRepository;
 import com.moeda.estudantil.repository.ProfessorRepository;
+import com.moeda.estudantil.util.EmailUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MeritoService {
+
     private MeritoRepository meritoRepository;
     private ProfessorRepository professorRepository;
     private AlunoRepository alunoRepository;
 
-    public MeritoService(MeritoRepository meritoRepository, ProfessorRepository professorRepository, AlunoRepository alunoRepository) {
+    private EmailService emailService;
+
+    public MeritoService(MeritoRepository meritoRepository, ProfessorRepository professorRepository, AlunoRepository alunoRepository, EmailService emailService) {
         this.meritoRepository = meritoRepository;
         this.professorRepository = professorRepository;
         this.alunoRepository = alunoRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -31,6 +36,12 @@ public class MeritoService {
         meritoRepository.save(merito);
         professorRepository.save(professor);
         alunoRepository.save(aluno);
+
+        String corpoEmailAluno = EmailUtils.gerarEmailReconhecimento(aluno.getNome(), professor.getNome(), dto.valor(), dto.motivo());
+        emailService.enviarEmail(aluno.getEmail(), "Parabéns! Você ganhou novos pontos no Educa Coins",  corpoEmailAluno);
+
+        String corpoEmailProfessor = EmailUtils.gerarEmailConfirmacaoProfessor(professor.getNome(), aluno.getNome(), dto.valor(), dto.motivo());
+        emailService.enviarEmail(professor.getEmail(), "Reconhecimento enviado com sucesso!",  corpoEmailProfessor);
     }
 
     /*@Transactional
