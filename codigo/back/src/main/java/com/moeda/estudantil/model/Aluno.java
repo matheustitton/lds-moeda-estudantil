@@ -33,9 +33,9 @@ public class Aluno extends Usuario {
     @Setter
     private InstituicaoEnsino instituicao;
 
-    @OneToMany(mappedBy = "recebedor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
     @Getter @Setter
-    private List<Pontuacao> transacoes;
+    private List<Merito> transacoes;
 
     @Column(nullable = false)
     @Getter @Setter
@@ -66,7 +66,7 @@ public class Aluno extends Usuario {
         this.saldo += valor;
     }
 
-    public void adicionarTransacao(Pontuacao pontuacao) {
+    public void adicionarTransacao(Merito pontuacao) {
         this.transacoes.add(pontuacao);
     }
 

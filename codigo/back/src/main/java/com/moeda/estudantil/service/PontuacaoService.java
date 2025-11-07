@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.moeda.estudantil.dto.pontuacao.PontuacaoCreateRequestDTO;
 import com.moeda.estudantil.dto.pontuacao.PontuacaoDTO;
 import com.moeda.estudantil.model.Aluno;
+import com.moeda.estudantil.model.Merito;
 import com.moeda.estudantil.model.Pontuacao;
 import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.AlunoRepository;
@@ -29,7 +30,7 @@ public class PontuacaoService {
     public void criar(PontuacaoCreateRequestDTO dto){
         Professor professor = professorRepository.findById(dto.doadorId()).orElseThrow(() -> new RuntimeException("Professor não encontrado."));
         Aluno aluno = alunoRepository.findById(dto.recebedorId()).orElseThrow(() -> new RuntimeException("Aluno não encontrado."));
-        Pontuacao pontuacao = new Pontuacao(dto.valor(), professor, aluno, dto.motivo());
+        Merito pontuacao = new Merito(dto.valor(), professor, aluno, dto.motivo());
         if (dto.valor() < 0)
             throw new RuntimeException("Valor da pontuação deve ser positivo.");
         aluno.atualizarSaldo(dto.valor());
@@ -44,15 +45,15 @@ public class PontuacaoService {
 
     @Transactional
     public PontuacaoDTO buscar (Long id) {
-        Pontuacao pontuacao = pontuacaoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pontuação não encontrada."));
-        return new PontuacaoDTO(pontuacao.getId().intValue(), pontuacao.getValor(), pontuacao.getMotivo(), pontuacao.getDoador().getId(), pontuacao.getRecebedor().getId());
+        Merito pontuacao = pontuacaoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pontuação não encontrada."));
+        return new PontuacaoDTO(pontuacao.getId().intValue(), pontuacao.getValor(), pontuacao.getMotivo(), pontuacao.getProfessor().getId(), pontuacao.getAluno().getId());
     }
 
     @Transactional
     public PontuacaoDTO[] listarPorAluno(Long alunoId) {
         Aluno aluno = alunoRepository.findById(alunoId).orElseThrow(() -> new RuntimeException("Aluno não encontrado."));
         return aluno.getTransacoes().stream()
-                .map(pontuacao -> new PontuacaoDTO(pontuacao.getId().intValue(), pontuacao.getValor(), pontuacao.getMotivo(), pontuacao.getDoador().getId(), pontuacao.getRecebedor().getId()))
+                .map(pontuacao -> new PontuacaoDTO(pontuacao.getId().intValue(), pontuacao.getValor(), pontuacao.getMotivo(), pontuacao.getProfessor().getId(), pontuacao.getAluno().getId()))
                 .toArray(PontuacaoDTO[]::new);
     }
 
@@ -60,7 +61,7 @@ public class PontuacaoService {
     public PontuacaoDTO[] listarPorProfessor(Long professorId) {
         Professor professor = professorRepository.findById(professorId).orElseThrow(() -> new RuntimeException("Professor não encontrado."));
         return professor.getTransacoes().stream()
-                .map(pontuacao -> new PontuacaoDTO(pontuacao.getId().intValue(), pontuacao.getValor(), pontuacao.getMotivo(), pontuacao.getDoador().getId(), pontuacao.getRecebedor().getId()))
+                .map(pontuacao -> new PontuacaoDTO(pontuacao.getId().intValue(), pontuacao.getValor(), pontuacao.getMotivo(), pontuacao.getProfessor().getId(), pontuacao.getAluno().getId()))
                 .toArray(PontuacaoDTO[]::new);
     }
 

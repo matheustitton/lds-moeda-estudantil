@@ -46,8 +46,8 @@ public class Professor extends Usuario {
     @JoinColumn(name = "instituicao_id", nullable = false)
     private InstituicaoEnsino instituicao;
 
-    @OneToMany(mappedBy = "professor_id", cascade = CascadeType.ALL)
-    private List<Pontuacao> transacoes;
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
+    private List<Merito> transacoes;
 
     @Column(nullable = false)
     private int saldo;
@@ -72,9 +72,9 @@ public class Professor extends Usuario {
         );
     }
 
-    public void adicionarTransacao(Pontuacao transacao) {
-        this.transacoes.add(transacao);
-        this.saldo -= transacao.getValor();
+    public void adicionarTransacao(Merito pontuacao) {
+        this.transacoes.add(pontuacao);
+        this.saldo -= pontuacao.getValor();
     }
 
 }

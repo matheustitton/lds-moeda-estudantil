@@ -6,6 +6,7 @@ import com.moeda.estudantil.dto.professor.ProfessorCreateRequestDTO;
 import com.moeda.estudantil.dto.professor.ProfessorDTO;
 import com.moeda.estudantil.dto.professor.ProfessorUpdateRequestDTO;
 import com.moeda.estudantil.model.InstituicaoEnsino;
+import com.moeda.estudantil.model.Merito;
 import com.moeda.estudantil.model.Pontuacao;
 import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.InstituicaoEnsinoRepository;
@@ -69,7 +70,7 @@ public class ProfessorService {
     }
 
     @Transactional
-    public void doarMoedas(Long doadorId, Pontuacao pontuacao) {
+    public void doarMoedas(Long doadorId, Merito pontuacao) {
         Professor doador = buscarPorId(doadorId);
         if (doador.getSaldo() < pontuacao.getValor()) {
             throw new RuntimeException("Saldo insuficiente para realizar a doação.");
