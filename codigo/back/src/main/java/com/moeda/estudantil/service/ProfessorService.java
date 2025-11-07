@@ -85,7 +85,7 @@ public class ProfessorService {
     @Transactional
     public void resetarSaldo(Long professorId) {
         Professor professor = buscarPorId(professorId);
-        professor.setSaldo(professor.getMAX_PONTOS());
+        professor.setSaldo(1000);
         repository.save(professor);
     }
 
