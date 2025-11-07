@@ -8,7 +8,6 @@ export class InstituicaoEnsinoRequisicao {
     private static readonly ENDPOINT: string = "/api/instituicoes-ensino";
 
     static async BuscarAlunos(instituicaoId: number): Promise<ResponseDto<AlunoResponse[]>> {
-        console.log(instituicaoId)
         return requisicaoBase(`${this.ENDPOINT}/${instituicaoId}/alunos`, "GET");
     }
 }
