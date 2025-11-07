@@ -10,9 +10,16 @@ INSERT INTO instituicao_ensino (nome, cnpj) VALUES
 TRUNCATE TABLE usuario RESTART IDENTITY CASCADE;
 INSERT INTO usuario (email, senha, tipo_usuario) VALUES
 ('professor.1@gmail.com', 'senha123', 'PROFESSOR'),
-('professor.2@gmail.com', 'senha123', 'PROFESSOR');
+('professor.2@gmail.com', 'senha123', 'PROFESSOR'),
+('aluno.1@gmail.com', 'senha123', 'ALUNO'),
+('aluno.2@gmail.com', 'senha123', 'ALUNO');
 
 TRUNCATE TABLE professor RESTART IDENTITY CASCADE;
 INSERT INTO professor (id, nome, departamento, cpf, instituicao_id, saldo) VALUES
 (1, 'Professor 1', 'Departamento de Matemática', '12345678901', 1, 1000),
 (2, 'Professor 2', 'Departamento de Física', '10987654321', 2, 1000);
+
+TRUNCATE TABLE aluno RESTART IDENTITY CASCADE;
+INSERT INTO aluno (id, nome, rg, cpf, curso, instituicao_id, saldo) VALUES
+(3, 'Aluno 1', '385598300', '16547087042', 'Engenharia de Software', 1, 0),
+(4, 'Aluno 2', '112926216', '66813014013', 'Ciência da Computaria', 2, 0);
