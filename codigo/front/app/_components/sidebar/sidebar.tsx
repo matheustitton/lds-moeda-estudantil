@@ -43,6 +43,12 @@ export function AppSidebar() {
         icon: <CoinsIcon />,
         root: true,
       },
+      {
+        title: "Minhas transações",
+        route: routes.transacoes,
+        icon: <CoinsIcon />,
+        root: true,
+      }
     ] : []),
     ...(isAdmin
       ? [

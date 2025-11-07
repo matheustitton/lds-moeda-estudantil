@@ -34,7 +34,6 @@ export default function FormEmpresaParceira({ onVoltarLogin }: { onVoltarLogin: 
   const queryClient = useQueryClient()
 
   const handleSubmit = async (values: FormData) => {
-    console.log(values)
     try {
       const response = await api.post('http://localhost:8080/api/empresas-parceiras', values)
 

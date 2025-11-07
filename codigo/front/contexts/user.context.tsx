@@ -4,14 +4,15 @@ import { Utils } from '@/lib/utils/utils'
 import { AlunoRequisicao } from '@/server/Aluno'
 import { EmpresaRequisicao } from '@/server/Empresa'
 import { ProfessorRequisicao } from '@/server/Professor'
-import { EmpresaParceira } from '@/types/Empresa/empresa.response'
 import { ITipoUsuario, TipoUsuario } from '@/types/Usuario/enum'
-import { AlunoResponse } from '@/types/Usuario/usuario.response'
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 type UsuarioContextType = {
   usuario: ITipoUsuario | null
   setUser: (usuario: ITipoUsuario | null) => void
+  refetchUsuario: () => void
+  isLoading: boolean
 }
 
 type UsuarioContextProviderProps = {
@@ -21,6 +22,8 @@ type UsuarioContextProviderProps = {
 const UsuarioContextDefaultValues: UsuarioContextType = {
   usuario: null,
   setUser: () => {},
+  refetchUsuario: () => {},
+  isLoading: false,
 }
 
 export const UsuarioContext = createContext<UsuarioContextType>(UsuarioContextDefaultValues)
@@ -30,36 +33,59 @@ export function useUsuario() {
 }
 
 export function UsuarioContextProvider({ children }: UsuarioContextProviderProps) {
-  const [usuario, setUser] = useState<ITipoUsuario | null | undefined>(undefined)
+  const [usuario, setUser] = useState<ITipoUsuario | null>(null)
 
-  useEffect(() => {
-    const token = Utils.Sessao.buscarTokenAcesso() ?? null;
-    if(!token) return;
+  const token = Utils.Sessao.buscarTokenAcesso()
+  const decoded = Utils.Sessao.decodificarToken()
 
-    const decoded = Utils.Sessao.decodificarToken()
-    
-    if(decoded?.tipo == TipoUsuario.ALUNO){
-        AlunoRequisicao.GetById(Number(decoded.sub)).then((response) => {
-            console.log(response.data)
-            setUser(response.data)
-        });
-    } else if(decoded?.tipo == TipoUsuario.EMPRESA_PARCEIRA){
-        EmpresaRequisicao.GetById(Number(decoded.sub)).then((response) => {
-            console.log(response.data)
-            setUser(response.data)
-        });
-    }
-    else if(decoded?.tipo == TipoUsuario.PROFESSOR){
-        ProfessorRequisicao.GetById(Number(decoded.sub)).then((response) => {
-            console.log(response.data)
-            setUser(response.data)
-        });
-    }
-  }, [])
+  const { data, refetch, isFetching } = useQuery({
+    queryKey: ['usuario'],
+    queryFn: async () => {
+      if (!token || !decoded) return null
 
-  if (usuario === undefined) {
-    return null
+      const id = Number(decoded.sub)
+      const tipo = decoded.tipo as TipoUsuario
+
+      switch (tipo) {
+        case TipoUsuario.ALUNO: {
+          const res = await AlunoRequisicao.GetById(id)
+          return res.data ?? null
+        }
+        case TipoUsuario.EMPRESA_PARCEIRA: {
+          const res = await EmpresaRequisicao.GetById(id)
+          return res.data ?? null
+        }
+        case TipoUsuario.PROFESSOR: {
+          const res = await ProfessorRequisicao.GetById(id)
+          return res.data ?? null
+        }
+        default:
+          return null
+      }
+    },
+    enabled: !!token, // só executa se houver token
+    staleTime: 1000 * 60 * 5, // cache por 5 minutos
+  })
+
+  // Atualiza estado local quando o useQuery retorna
+  if (data && data !== usuario) {
+    setUser(data)
   }
 
-  return <UsuarioContext.Provider value={{ usuario, setUser }}>{children}</UsuarioContext.Provider>
+  if(!data){
+    return;
+  }
+
+  return (
+    <UsuarioContext.Provider
+      value={{
+        usuario: data ?? usuario,
+        setUser,
+        refetchUsuario: refetch,
+        isLoading: isFetching,
+      }}
+    >
+      {children}
+    </UsuarioContext.Provider>
+  )
 }

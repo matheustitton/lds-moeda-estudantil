@@ -7,7 +7,6 @@ export class AlunoRequisicao {
     private static readonly ENDPOINT: string = "/api/alunos";
 
     static async Excluir(idAluno:number): Promise<ResponseDto<void>> {
-        console.log(idAluno)
         return requisicaoBase(`${this.ENDPOINT}/${idAluno}`, "DELETE");
     }
 
@@ -20,7 +19,6 @@ export class AlunoRequisicao {
     }
 
     static async Editar(alunoId: number, aluno: AlunoUpdateRequest): Promise<ResponseDto<AlunoResponse>> {
-        console.log(aluno)
         return requisicaoBase(`${this.ENDPOINT}/${alunoId}/id=${alunoId}`, "PUT", undefined, aluno);
     }
 }

@@ -52,13 +52,11 @@ export default function FormAluno({ onVoltarLogin }: { onVoltarLogin: () => void
     queryKey: ['instituicoes'],
     queryFn: async () => {
       const response = await api.get('http://localhost:8080/api/instituicoes-ensino')
-      console.log(response);
       return response.data
     }
   })
 
   const handleSubmit = async (values: FormData) => {
-    console.log(values)
     try {
       const response = await api.post('http://localhost:8080/api/alunos', values)
 

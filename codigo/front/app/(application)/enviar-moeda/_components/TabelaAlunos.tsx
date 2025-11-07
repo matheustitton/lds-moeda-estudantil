@@ -1,30 +1,38 @@
 'use client'
-
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { ColumnDef } from '@tanstack/react-table'
-import { Button } from '@/components/ui/button'
-import { DataTable } from '@/components/ui/data-tables'
-import { ArrowUpDown } from 'lucide-react'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import api from '@/lib/axios'
-import { BsThreeDots } from 'react-icons/bs'
-import { EmpresaRequisicao } from '@/server/Empresa'
-import { EmpresaParceira } from '@/types/Empresa/empresa.response'
-import { AlunoResponse } from '@/types/Usuario/usuario.response'
-import { AlunoRequisicao } from '@/server/Aluno'
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { DataTable } from "@/components/ui/data-tables"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useUsuario } from "@/contexts/user.context"
+import { InstituicaoEnsinoRequisicao } from "@/server/InstituicaoEnsino"
+import { ProfessorResponse } from "@/types/Professor/professor.response"
+import { AlunoResponse } from "@/types/Usuario/usuario.response"
+import { useQuery } from "@tanstack/react-query"
+import { ColumnDef } from "@tanstack/react-table"
+import { ArrowUpDown } from "lucide-react"
+import { BsThreeDots } from "react-icons/bs"
+import EnviarMoeda from "./ModalEnviarMoeda"
+import ModalEnviarMoeda from "./ModalEnviarMoeda"
 
 export default function TabelaAlunos() {
-  const queryClient = useQueryClient()
+  const { usuario } = useUsuario();
+  const [open, setOpen] = useState(false)
+  const [alunoSelecionado, setAlunoSelecionado] = useState<AlunoResponse | null>(null)
 
-  const { data, refetch } = useQuery<AlunoResponse[]>({
+  const { data } = useQuery<AlunoResponse[]>({
     queryKey: ['alunos'],
     queryFn: async () => {
-      const response = await AlunoRequisicao.BuscarTodos()
+      if (!usuario) return []
+      const response = await InstituicaoEnsinoRequisicao.BuscarAlunos((usuario as ProfessorResponse).instituicao.id)
       return response.data ?? []
     }
   })
 
-  // Definição das colunas
+  const handleEnviarMoedas = (aluno: AlunoResponse) => {
+    setAlunoSelecionado(aluno)
+    setOpen(true)
+  }
+
   const columns: ColumnDef<AlunoResponse>[] = [
     {
       accessorKey: 'aluno',
@@ -60,7 +68,7 @@ export default function TabelaAlunos() {
       accessorKey: 'saldo',
       header: ({ column }) => (
         <Button variant="ghost" className="!p-0" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Instituição
+          Saldo
           <ArrowUpDown />
         </Button>
       ),
@@ -78,14 +86,13 @@ export default function TabelaAlunos() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-                variant="destructive"
-              onClick={async (e) => {
+              className="hover:cursor-pointer"
+              onClick={(e) => {
                 e.stopPropagation()
-                // await EmpresaRequisicao.Excluir(row.original.id)
-                // queryClient.invalidateQueries({queryKey: ['empresas']});
+                handleEnviarMoedas(row.original)
               }}
             >
-              Excluir
+              Enviar moedas
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -94,12 +101,21 @@ export default function TabelaAlunos() {
   ]
 
   return (
-    <div className="w-3xl">
+    <div className="flex h-auto w-auto mx-8 align-middle">
       <DataTable
         columnDef={columns}
         data={data || []}
         onClickRow={() => {}}
       />
+
+      {alunoSelecionado && (
+        <ModalEnviarMoeda
+          open={open}
+          aluno={alunoSelecionado}
+          idProfessor={(usuario as ProfessorResponse).id}
+          onClose={() => setOpen(false)}
+        />
+      )}
     </div>
   )
 }
