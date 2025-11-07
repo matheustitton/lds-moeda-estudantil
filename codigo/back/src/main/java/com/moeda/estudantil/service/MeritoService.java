@@ -24,8 +24,8 @@ public class MeritoService {
 
     @Transactional
     public void criar(MeritoCreateRequestDTO dto) {
-        Professor professor = professorRepository.findById(dto.doadorId()).orElseThrow(() -> new RuntimeException("Professor não encontrado."));
-        Aluno aluno = alunoRepository.findById(dto.recebedorId()).orElseThrow(() -> new RuntimeException("Aluno não encontrado."));
+        Professor professor = professorRepository.findById(dto.idProfessor()).orElseThrow(() -> new RuntimeException("Professor não encontrado."));
+        Aluno aluno = alunoRepository.findById(dto.idAluno()).orElseThrow(() -> new RuntimeException("Aluno não encontrado."));
 
         Merito merito = professor.novoMerito(aluno, dto.valor(), dto.motivo());
         meritoRepository.save(merito);

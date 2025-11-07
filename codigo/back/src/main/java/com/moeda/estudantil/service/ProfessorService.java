@@ -1,7 +1,10 @@
 package com.moeda.estudantil.service;
 
 import com.moeda.estudantil.dto.merito.MeritoProfessorDTO;
+import com.moeda.estudantil.dto.professor.ProfessorDTO;
+import com.moeda.estudantil.model.Aluno;
 import com.moeda.estudantil.model.Merito;
+import com.moeda.estudantil.model.Professor;
 import com.moeda.estudantil.repository.MeritoRepository;
 import com.moeda.estudantil.repository.ProfessorRepository;
 import org.springframework.stereotype.Service;
@@ -19,17 +22,20 @@ public class ProfessorService {
         this.meritoRepository = meritoRepository;
     }
 
+    private Professor buscarPorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Professor não encontrado."));
+    }
+
+    public ProfessorDTO buscar(Long id) {
+        return buscarPorId(id).toDto();
+    }
+
     public List<MeritoProfessorDTO> buscarMeritos(Long id) {
         List<Merito> meritos = meritoRepository.findByProfessor_Id(id);
         return meritos.stream().map(Merito::toDtoProfessor).toList();
     }
 
     /*@Transactional
-    public ProfessorDTO buscar(Long id) {
-        return buscarPorId(id).toDto();
-    }
-
-    @Transactional
     public ProfessorDTO atualizar(Long id, ProfessorUpdateRequestDTO dto) {
         Professor professor = buscarPorId(id);
         InstituicaoEnsino instituicaoEnsino = buscarInstituicaoEnsino(dto.instituicaoEnsino());
