@@ -15,9 +15,9 @@ public record AlunoUpdateRequestDTO(
     Long instituicaoEnsino,
 
     @NotBlank(message = "O e-mail é obrigatório.")
-    String email,
+    String email
 
-    @NotBlank(message = "A senha é obrigatória.")
-    String senha
+    // @NotBlank(message = "A senha é obrigatória.")
+    // String senha
 ) {
 }

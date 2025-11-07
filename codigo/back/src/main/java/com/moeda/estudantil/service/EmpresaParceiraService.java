@@ -3,10 +3,11 @@ package com.moeda.estudantil.service;
 import org.springframework.stereotype.Service;
 
 import com.moeda.estudantil.dto.empresa_parceira.EmpresaParceiraCreateRequestDTO;
-import com.moeda.estudantil.dto.empresa_parceira.EmpresaParceiraResponseDTO;
+import com.moeda.estudantil.dto.empresa_parceira.EmpresaParceiraDTO;
 import com.moeda.estudantil.model.EmpresaParceira;
 import com.moeda.estudantil.repository.EmpresaParceiraRepository;
 import com.moeda.estudantil.util.CriptografiaUtil;
+import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +20,9 @@ public class EmpresaParceiraService {
         this.empresaFiliadaRepository = empresaFiliadaRepository;
     }
 
-    public EmpresaParceiraResponseDTO findById(Long id) {
-        if (empresaFiliadaRepository.findAll().stream().noneMatch(e -> e.getId().equals(id))) {
-            return null;
-        }
-        return empresaFiliadaRepository.findById(id)
-                .map(empresa -> new EmpresaParceiraResponseDTO(empresa.getId(), empresa.getCnpj(), empresa.getRazaoSocial()))
-                .orElse(null);
+    public EmpresaParceiraDTO findById(Long id) {
+        EmpresaParceira empresa = empresaFiliadaRepository.findById(id).orElseThrow(() -> new RuntimeException("Empresa parceira não encontrada"));
+        return empresa.toDto();
     }
 
     @Transactional
@@ -36,30 +33,26 @@ public class EmpresaParceiraService {
         empresaFiliadaRepository.save(empresa);
     }
 
-    public EmpresaParceiraResponseDTO update(Long id, EmpresaParceiraCreateRequestDTO empresaFiliadaCreateRequestDTO) {
-        if (empresaFiliadaRepository.findAll().stream().noneMatch(e -> e.getId().equals(id))) {
-            return null;
-        }
-        return empresaFiliadaRepository.findById(id)
-                .map(empresa -> {
-                    empresa = new EmpresaParceira(empresaFiliadaCreateRequestDTO.cnpj(), empresaFiliadaCreateRequestDTO.razaoSocial(), empresaFiliadaCreateRequestDTO.email(), empresaFiliadaCreateRequestDTO.senha());
-                    empresa = empresaFiliadaRepository.save(empresa);
-                    return new EmpresaParceiraResponseDTO(empresa.getId(), empresa.getCnpj(), empresa.getRazaoSocial());
-                })
-                .orElse(null);
+    public EmpresaParceiraDTO update(Long id, EmpresaParceiraCreateRequestDTO empresaFiliadaCreateRequestDTO) {
+        EmpresaParceira empresa = empresaFiliadaRepository.findById(id).orElseThrow(() -> new RuntimeException("Empresa parceira não encontrada"));
+
+        empresa.setCnpj(empresaFiliadaCreateRequestDTO.cnpj());
+        empresa.setRazaoSocial(empresaFiliadaCreateRequestDTO.razaoSocial());
+        empresa.setEmail(empresaFiliadaCreateRequestDTO.email());
+        empresa.setSenha(CriptografiaUtil.criptografar(empresaFiliadaCreateRequestDTO.senha()));
+
+        empresaFiliadaRepository.save(empresa);
+        return empresa.toDto();
     }
 
-    public EmpresaParceiraResponseDTO delete(Long id) {
-        if (empresaFiliadaRepository.findAll().stream().noneMatch(e -> e.getId().equals(id))) {
-            return null;
-        }
-        empresaFiliadaRepository.deleteById(id);
-        return new EmpresaParceiraResponseDTO(id, null, null);
+    public void delete(Long id) {
+        EmpresaParceira empresa = empresaFiliadaRepository.findById(id).orElseThrow(() -> new RuntimeException("Empresa parceira não encontrada"));
+        empresaFiliadaRepository.delete(empresa);
     }
 
-    public EmpresaParceiraResponseDTO[] findAll() {
+    public List<EmpresaParceiraDTO> findAll() {
         return empresaFiliadaRepository.findAll().stream()
-                .map(empresa -> new EmpresaParceiraResponseDTO(empresa.getId(), empresa.getCnpj(), empresa.getRazaoSocial()))
-                .toArray(EmpresaParceiraResponseDTO[]::new);
+                .map(EmpresaParceira::toDto)
+                .toList();
     }
 }

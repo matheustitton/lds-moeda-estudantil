@@ -8,6 +8,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import api from '@/lib/axios'
+import { toast } from 'sonner'
 
 const empresaSchema = z.object({
   cnpj: z.string().min(1, { message: 'O CNPJ é obrigatório.' }),
@@ -18,7 +19,7 @@ const empresaSchema = z.object({
 
 type FormData = z.infer<typeof empresaSchema>
 
-export default function FormEmpresaParceira() {
+export default function FormEmpresaParceira({ onVoltarLogin }: { onVoltarLogin: () => void }) {
   const form = useForm<FormData>({
     mode: 'onTouched',
     resolver: zodResolver(empresaSchema),
@@ -39,25 +40,25 @@ export default function FormEmpresaParceira() {
 
       if (response.status === 201 || response.status === 200) {
         queryClient.invalidateQueries({ queryKey: ['empresas'] })
-        alert('Empresa cadastrada com sucesso!')
+        toast.success("Cadastro realizado com sucesso! Agora você pode fazer login.");
         form.reset()
+        onVoltarLogin()
+      } else {
+        toast.error("E-mail ou CNPJ já cadastrado.");
       }
     } catch (error) {
       console.error(error)
-      alert('Erro ao cadastrar empresa.')
     }
   }
 
   return (
-    <div className='w-full flex items-center justify-center'>
     <Form {...form}>
+      <p className='text-gray-500 mb-6'>Preencha o formulário abaixo para criar sua conta de empresa parceira.</p>
+
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col justify-center items-center-safe gap-y-4 w-md"
+        className="flex flex-col gap-y-4 w-full"
       >
-        <h1 className="font-bold text-2xl">Cadastro de Empresa Parceira</h1>
-
-        {/* CNPJ */}
         <FormField
           control={form.control}
           name="cnpj"
@@ -72,7 +73,6 @@ export default function FormEmpresaParceira() {
           )}
         />
 
-        {/* Razão Social */}
         <FormField
           control={form.control}
           name="razaoSocial"
@@ -87,7 +87,6 @@ export default function FormEmpresaParceira() {
           )}
         />
 
-        {/* Email */}
         <FormField
           control={form.control}
           name="email"
@@ -102,7 +101,6 @@ export default function FormEmpresaParceira() {
           )}
         />
 
-        {/* Senha */}
         <FormField
           control={form.control}
           name="senha"
@@ -117,11 +115,23 @@ export default function FormEmpresaParceira() {
           )}
         />
 
-        <Button type="submit" className="mt-4">
+        <Button
+          type="submit"
+          variant={"secondary"}
+          className="w-full py-6 text-lg font-semibold bg-[#1E3A8A] hover:bg-[#7B1E3A] text-white rounded-xl transition-colors cursor-pointer"
+        >
           Cadastrar
         </Button>
+
+        <div className="flex w-full text-center justify-center py-3">
+          <p
+            className="text-sm underline text-[#7B1E3A] hover:text-[#1E3A8A] cursor-pointer"
+            onClick={onVoltarLogin}
+          >
+            Já tem uma conta? Fazer login
+          </p>
+        </div>
       </form>
     </Form>
-    </div>
   )
 }

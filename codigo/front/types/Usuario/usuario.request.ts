@@ -1,8 +1,4 @@
-export enum TipoUsuario {
-  ALUNO = 'ALUNO',
-  PROFESSOR = 'PROFESSOR',
-  EMPRESA_PARCEIRA = 'EMPRESA_PARCEIRA'
-}
+import { TipoUsuario } from "./enum";
 
 export interface UsuarioRequest {
   nome: string;
