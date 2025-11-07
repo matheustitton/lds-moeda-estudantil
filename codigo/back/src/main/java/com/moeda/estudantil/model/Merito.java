@@ -2,6 +2,8 @@ package com.moeda.estudantil.model;
 
 import java.time.OffsetDateTime;
 
+import com.moeda.estudantil.dto.merito.MeritoAlunoDTO;
+import com.moeda.estudantil.dto.merito.MeritoProfessorDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -50,6 +52,15 @@ public class Merito {
         this.professor = professor;
         this.aluno = aluno;
         this.motivo = motivo;
+
+        aluno.atualizarSaldo(valor);
     }
-    
+
+    public MeritoAlunoDTO toDtoAluno() {
+        return new MeritoAlunoDTO(id, valor, motivo, professor.toDto(), data);
+    }
+
+    public MeritoProfessorDTO toDtoProfessor() {
+        return new MeritoProfessorDTO(id, valor, motivo, aluno.toDto(), data);
+    }
 }

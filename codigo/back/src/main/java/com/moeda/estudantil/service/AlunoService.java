@@ -3,26 +3,32 @@ package com.moeda.estudantil.service;
 import com.moeda.estudantil.dto.aluno.AlunoCreateRequestDTO;
 import com.moeda.estudantil.dto.aluno.AlunoDTO;
 import com.moeda.estudantil.dto.aluno.AlunoUpdateRequestDTO;
-import com.moeda.estudantil.dto.pontuacao.PontuacaoDTO;
+import com.moeda.estudantil.dto.merito.MeritoAlunoDTO;
 import com.moeda.estudantil.model.Aluno;
 import com.moeda.estudantil.model.InstituicaoEnsino;
+import com.moeda.estudantil.model.Merito;
 import com.moeda.estudantil.repository.AlunoRepository;
 import com.moeda.estudantil.repository.InstituicaoEnsinoRepository;
+import com.moeda.estudantil.repository.MeritoRepository;
 import com.moeda.estudantil.util.CriptografiaUtil;
 
 import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AlunoService {
 
     private AlunoRepository repository;
     private InstituicaoEnsinoRepository instituicaoEnsinoRepository;
+    private MeritoRepository meritoRepository;
 
-    public AlunoService(AlunoRepository repository, InstituicaoEnsinoRepository instituicaoEnsinoRepository) {
+    public AlunoService(AlunoRepository repository, InstituicaoEnsinoRepository instituicaoEnsinoRepository,  MeritoRepository meritoRepository) {
         this.repository = repository;
         this.instituicaoEnsinoRepository = instituicaoEnsinoRepository;
+        this.meritoRepository = meritoRepository;
     }
 
     private Aluno buscarPorId(Long id) {
@@ -68,12 +74,8 @@ public class AlunoService {
         repository.delete(aluno);
     }
 
-    @Transactional
-    public int receberDoacao(Long recebedorId, PontuacaoDTO dto) {
-        Aluno recebedor = buscarPorId(recebedorId);
-        recebedor.atualizarSaldo(dto.valor());
-        repository.save(recebedor);
-        return recebedor.getSaldo();       
+    public List<MeritoAlunoDTO> buscarMeritos(Long id) {
+        List<Merito> meritos = meritoRepository.findByAluno_Id(id);
+        return meritos.stream().map(Merito::toDtoAluno).toList();
     }
-
 }

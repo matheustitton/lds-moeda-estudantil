@@ -69,9 +69,22 @@ public class Professor extends Usuario {
         );
     }
 
-    public void adicionarTransacao(Merito pontuacao) {
+    /*public void adicionarTransacao(Merito pontuacao) {
         this.transacoes.add(pontuacao);
         this.saldo -= pontuacao.getValor();
+    }*/
+
+    public Merito novoMerito(Aluno aluno, int valor, String motivo) {
+        if (valor > saldo)
+            throw new RuntimeException("Saldo insuficiente.");
+
+        if (valor < 0)
+            throw new RuntimeException("Saldo inválido.");
+
+        Merito merito = new Merito(valor, this, aluno, motivo);
+        saldo -= valor;
+
+        return merito;
     }
 
 }

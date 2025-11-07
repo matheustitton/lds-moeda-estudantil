@@ -1,4 +1,4 @@
-package com.moeda.estudantil.model;
+/*package com.moeda.estudantil.model;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ import lombok.Setter;
 @Table (name = "troca")
 @Getter
 @Setter
-public class Troca extends Transacao {
+public class Troca {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -54,3 +54,4 @@ public class Troca extends Transacao {
     }
 
 }
+*/

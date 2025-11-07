@@ -69,5 +69,4 @@ public class Aluno extends Usuario {
     public void adicionarTransacao(Merito pontuacao) {
         this.transacoes.add(pontuacao);
     }
-
 }
