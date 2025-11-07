@@ -62,7 +62,7 @@ public class Professor extends Usuario {
         this.departamento = departamento;
         this.cpf = cpf;
         this.instituicao = instituicao;
-        this.saldo = MAX_PONTOS;
+        this.saldo = 1000;
         this.transacoes = List.of();
         this.MAX_PONTOS = 1000;
     }
