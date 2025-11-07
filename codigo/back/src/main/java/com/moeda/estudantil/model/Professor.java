@@ -39,6 +39,9 @@ public class Professor extends Usuario {
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
+    @Column(nullable = true)
+    private int MAX_PONTOS = 1000;
+
     @ManyToOne
     @JoinColumn(name = "instituicao_id", nullable = false)
     private InstituicaoEnsino instituicao;
@@ -61,6 +64,7 @@ public class Professor extends Usuario {
         this.instituicao = instituicao;
         this.saldo = 1000;
         this.transacoes = List.of();
+        this.MAX_PONTOS = 1000;
     }
 
     public ProfessorDTO toDto() {
