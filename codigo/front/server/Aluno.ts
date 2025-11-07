@@ -13,4 +13,8 @@ export class AlunoRequisicao {
     static async BuscarTodos(): Promise<ResponseDto<AlunoResponse[]>> {
         return requisicaoBase(`${this.ENDPOINT}`, "GET");
     }
+
+    static async GetById(alunoId: number): Promise<ResponseDto<AlunoResponse>> {
+        return requisicaoBase(`${this.ENDPOINT}?id=${alunoId}`, "GET");
+    }
 }

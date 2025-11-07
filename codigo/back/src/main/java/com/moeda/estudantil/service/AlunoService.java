@@ -51,13 +51,13 @@ public class AlunoService {
     public void atualizar(Long id, AlunoUpdateRequestDTO dto) {
         Aluno aluno = buscarPorId(id);
         InstituicaoEnsino instituicaoEnsino = buscarInstituicaoEnsino(dto.instituicaoEnsino());
-        String senhaCriptografada = CriptografiaUtil.criptografar(dto.senha());
+        // String senhaCriptografada = CriptografiaUtil.criptografar(dto.senha());
 
         aluno.setNome(dto.nome());
         aluno.setCurso(dto.curso());
         aluno.setInstituicao(instituicaoEnsino);
         aluno.setEmail(dto.email());
-        aluno.setSenha(senhaCriptografada);
+        // aluno.setSenha(senhaCriptografada);
 
         repository.save(aluno);
     }

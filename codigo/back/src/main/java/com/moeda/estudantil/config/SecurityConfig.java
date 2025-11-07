@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/alunos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/empresas-parceiras").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/instituicoes-ensino").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2

@@ -1,5 +1,6 @@
 import { ResponseDto } from "@/types/response";
 import { requisicaoBase } from "./requisicao.base";
+import { EmpresaParceira } from "@/types/Empresa/empresa.response";
 
 export class EmpresaRequisicao {
 
@@ -7,5 +8,9 @@ export class EmpresaRequisicao {
 
     static async Excluir(idEmpresa:number): Promise<ResponseDto<void>> {
         return requisicaoBase(`${this.ENDPOINT}/${idEmpresa}`, "DELETE");
+    }
+
+    static async GetById(idEmpresa: number): Promise<ResponseDto<EmpresaParceira>> {
+        return requisicaoBase(`${this.ENDPOINT}/${idEmpresa}`, "GET");
     }
 }

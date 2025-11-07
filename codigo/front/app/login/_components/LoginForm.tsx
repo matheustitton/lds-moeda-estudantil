@@ -14,6 +14,13 @@ import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import Image from "next/image";
 import { LoginRequisicao } from "@/server/Login";
 import { Utils } from "@/lib/utils/utils";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
+import AlunoForm from "@/app/login/_components/AlunoForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EmpresaForm from "@/app/login/_components/EmpresaForm";
+import { motion, AnimatePresence } from "framer-motion";
 
 const loginSchema = z.object({
   email: z.string().min(1, { message: "Informe o e-mail." }),
@@ -24,6 +31,9 @@ type FormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const { buscarTokenAcesso, limparTodos } = Utils.Sessao;
+  const [isLoginForm, setIsLoginForm] = useState(true);
+
+  const router = useRouter()
 
   const form = useForm<FormData>({
     mode: "onTouched",
@@ -42,12 +52,18 @@ export default function Login() {
       const response = await LoginRequisicao.Login(values);
 
       if (response.statusCode === 201 || response.statusCode === 200) {
-        alert("Login realizado com sucesso!");
+        router.push("/home")
+        toast.success("Login realizado com sucesso!");
         form.reset();
       }
+      else if (response.statusCode == 401){
+        toast.error("Erro ao realizar login. Verifique as credenciais informadas.");
+      }
+      else{
+        toast.error("Erro ao estabelecer conexão com o servidor.");
+      }
     } catch (error) {
-      console.error(error);
-      alert("Erro ao realizar login.");
+      console.error(error)
     }
   };
 
@@ -57,7 +73,7 @@ export default function Login() {
       <div className="flex w-full md:w-2/5 items-center justify-center p-10 bg-white shadow-lg">
         <div className="flex flex-col w-full max-w-md bg-white p-8 rounded-2xl border border-gray-100">
 
-          <div className="items-center justify-center">
+          {/* <div className="items-center justify-center">
             <Image
               src="/logo.png"
               alt="Logo da Aplicação"
@@ -65,67 +81,110 @@ export default function Login() {
               height={150}
               className="mx-auto mb-4 border-2 border-gray-100 rounded-full"
             />
-          </div>
+          </div> */}
 
           <h1 className="text-4xl font-bold mb-8 text-center text-[#1E3A8A]">
             Bem-vindo
           </h1>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="flex flex-col gap-y-4 w-full"
-            >
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        value={String(field.value)}
-                        onChange={field.onChange}
-                        placeholder="Email"
-                        className="h-12 text-lg border-2 border-gray-200 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] rounded-xl"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="senha"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        value={String(field.value)}
-                        onChange={field.onChange}
-                        type="password"
-                        placeholder="Senha"
-                        className="h-12 text-lg border-2 border-gray-200 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] rounded-xl"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              <div className="flex w-full justify-end">
-                <p className="text-sm underline text-[#7B1E3A] hover:text-[#1E3A8A] cursor-pointer">
-                  Esqueceu a senha?
-                </p>
-              </div>
-
-              <Button
-                type="submit"
-                variant={"secondary"}
-                className="w-full py-6 text-lg font-semibold bg-[#1E3A8A] hover:bg-[#7B1E3A] text-white rounded-xl transition-colors"
+          <AnimatePresence mode="wait">
+            {isLoginForm ? (
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.2 }}
               >
-                Entrar
-              </Button>
-            </form>
-          </Form>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                    className="flex flex-col gap-y-4 w-full"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              value={String(field.value)}
+                              onChange={field.onChange}
+                              placeholder="Email"
+                              className="h-12 text-lg border-2 border-gray-200 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] rounded-xl"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="senha"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              value={String(field.value)}
+                              onChange={field.onChange}
+                              type="password"
+                              placeholder="Senha"
+                              className="h-12 text-lg border-2 border-gray-200 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] rounded-xl"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="flex w-full justify-end">
+                      <p className="text-sm underline text-[#7B1E3A] hover:text-[#1E3A8A] cursor-pointer">
+                        Esqueceu a senha?
+                      </p>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      variant={"secondary"}
+                      className="w-full py-6 text-lg font-semibold bg-[#1E3A8A] hover:bg-[#7B1E3A] text-white rounded-xl transition-colors cursor-pointer"
+                    >
+                      Entrar
+                    </Button>
+
+                    <div className="flex w-full text-center justify-center py-3">
+                      <p
+                        className="text-sm underline text-[#7B1E3A] hover:text-[#1E3A8A] cursor-pointer"
+                        onClick={() => setIsLoginForm(false)}
+                      >
+                        Não tem uma conta? Cadastre-se
+                      </p>
+                    </div>
+                  </form>
+                </Form>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="cadastro"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Tabs defaultValue="aluno">
+                <TabsList>
+                  <TabsTrigger value="aluno">Alunos</TabsTrigger>
+                  <TabsTrigger value="empresa">Empresas</TabsTrigger>
+                </TabsList>
+                <TabsContent value="aluno">
+                  <AlunoForm onVoltarLogin={() => setIsLoginForm(true)} />
+                </TabsContent>
+                <TabsContent value="empresa">
+                  <EmpresaForm onVoltarLogin={() => setIsLoginForm(true)} />
+                </TabsContent>
+              </Tabs>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
