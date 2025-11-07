@@ -8,28 +8,37 @@ import { alunoSchema } from '@/app/login/_components/AlunoForm'
 import { TipoUsuario } from '@/types/Usuario/enum'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { AlunoResponse } from '@/types/Usuario/usuario.response'
+import { AlunoResponse, UsuarioResponse } from '@/types/Usuario/usuario.response'
 import z from 'zod'
+import { Button } from '@/components/ui/button'
+import { Pencil, Trash } from 'lucide-react'
+import { AlunoRequisicao, AlunoUpdateRequest } from '@/server/Aluno'
+import { Utils } from '@/lib/utils/utils'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function PerfilAluno() {
   const { usuario } = useUsuario()
+  const router = useRouter();
+
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const decode = Utils.Sessao.decodificarToken()
 
   const form = useForm<z.infer<typeof alunoSchema>>({
       mode: 'onTouched',
       resolver: zodResolver(alunoSchema),
       defaultValues: {
-        nome: '',
-        rg: '',
-        cpf: '',
-        curso: '',
-        email: '',
+        nome: (usuario as AlunoResponse).nome,
+        rg: (usuario as AlunoResponse).rg,
+        cpf: (usuario as AlunoResponse).cpf,
+        curso: (usuario as AlunoResponse).curso,
+        email: (usuario as AlunoResponse).email,
         senha: '',
         tipo: TipoUsuario.ALUNO,
         instituicaoEnsino: undefined
       }
     })
-
-    console.log(usuario)
 
   if (!usuario) {
     return (
@@ -39,13 +48,36 @@ export default function PerfilAluno() {
     )
   }
 
+  const handleEditar = () => {
+
+    const data = form.getValues();
+
+    const alunoUpdate: AlunoUpdateRequest = {
+      nome: data.nome,
+      curso: data.curso,
+      email: data.email,
+      instituicaoEnsino: (usuario as AlunoResponse).instituicao.id,
+    }
+    
+    AlunoRequisicao.Editar(Number(decode?.sub), alunoUpdate).then((res) => {
+      setModoEdicao(false)
+      if(res.statusCode < 300){
+        router.refresh()
+      }
+      else{
+        form.reset()
+        toast.error("Erro ao editar usuário");
+      }
+    })
+  }
+
   return (
     <div className="flex justify-center py-10">
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle>Perfil do Aluno</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className='flex flex-col gap-y-3'>
           <Form {...form}>
             <div className="grid gap-4">
               <FormField
@@ -55,9 +87,9 @@ export default function PerfilAluno() {
                   <FormItem>
                     <FormControl>
                       <Input
-                        {...field}
-                        value={(usuario as AlunoResponse).nome}
-                        readOnly
+                        onChange={field.onChange}
+                        value={field.value}
+                        readOnly={!modoEdicao}
                         className="h-12 text-lg border-2 border-gray-200 rounded-xl bg-gray-100"
                       />
                     </FormControl>
@@ -73,8 +105,9 @@ export default function PerfilAluno() {
                     <FormControl>
                       <Input
                         {...field}
-                        value={(usuario as AlunoResponse).email}
-                        readOnly
+                        onChange={field.onChange}
+                        value={field.value}
+                        readOnly={!modoEdicao}
                         className="h-12 text-lg border-2 border-gray-200 rounded-xl bg-gray-100"
                       />
                     </FormControl>
@@ -90,8 +123,9 @@ export default function PerfilAluno() {
                     <FormControl>
                       <Input
                         {...field}
-                        value={(usuario as AlunoResponse).cpf}
-                        readOnly
+                        onChange={field.onChange}
+                        value={field.value}
+                        readOnly={!modoEdicao}
                         className="h-12 text-lg border-2 border-gray-200 rounded-xl bg-gray-100"
                       />
                     </FormControl>
@@ -107,8 +141,9 @@ export default function PerfilAluno() {
                     <FormControl>
                       <Input
                         {...field}
-                        value={(usuario as AlunoResponse).rg}
-                        readOnly
+                        onChange={field.onChange}
+                        value={field.value}
+                        readOnly={!modoEdicao}
                         className="h-12 text-lg border-2 border-gray-200 rounded-xl bg-gray-100"
                       />
                     </FormControl>
@@ -124,8 +159,8 @@ export default function PerfilAluno() {
                     <FormControl>
                       <Input
                         {...field}
-                        value={(usuario as AlunoResponse).curso}
-                        readOnly
+                        value={field.value}
+                        readOnly={!modoEdicao}
                         className="h-12 text-lg border-2 border-gray-200 rounded-xl bg-gray-100"
                       />
                     </FormControl>
@@ -141,8 +176,10 @@ export default function PerfilAluno() {
                     <FormControl>
                       <Input
                         {...field}
-                        value={(usuario as AlunoResponse).instituicao?.nome || ''}
-                        readOnly
+                        onChange={field.onChange}
+                        value={(usuario as AlunoResponse).instituicao.nome}
+                        disabled
+                        readOnly={!modoEdicao}
                         className="h-12 text-lg border-2 border-gray-200 rounded-xl bg-gray-100"
                       />
                     </FormControl>
@@ -151,6 +188,35 @@ export default function PerfilAluno() {
               />
             </div>
           </Form>
+          <div className='flex justify-end gap-x-1'>
+            <Button onClick={async () => {
+              if(!modoEdicao){
+                setModoEdicao(true)
+              } else{
+                handleEditar()
+              }
+            }}>
+              <Pencil/> Editar
+            </Button>
+            <Button 
+              onClick={ async () => {
+                
+                AlunoRequisicao.Excluir(Number(decode?.sub)).then((response) => {
+                  if(response.statusCode == 204){
+                    toast.success("Usuário excluído com sucesso.");
+                    router.push("/login");
+                  }
+                  else{
+                    toast.error("Erro ao excluir a conta.")
+                  }
+
+                })
+              }}
+              className='bg-secondary hover:bg-secondary'
+            >
+              <Trash/> Excluir conta
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -10,6 +10,7 @@ import { EmpresaParceira } from '@/types/Empresa/empresa.response'
 import { TipoUsuario } from '@/types/Usuario/enum'
 import { useEffect } from 'react'
 import { Utils } from '@/lib/utils/utils'
+import { ProfessorResponse } from '@/types/Professor/professor.response'
 
 export default function Navbar() {
   const { usuario } = useUsuario()
@@ -27,6 +28,10 @@ export default function Navbar() {
 
         {decoded?.tipo === TipoUsuario.EMPRESA_PARCEIRA && (
           <EmpresaButton empresa={usuario as EmpresaParceira} />
+        )}
+
+        {decoded?.tipo === TipoUsuario.PROFESSOR && (
+          <ProfessorButton professor={usuario as ProfessorResponse} />
         )}
 
         <Button
@@ -72,7 +77,6 @@ function AlunoButton({ aluno }: AlunoButtonProps) {
   )
 }
 
-
 type EmpresaButtonProps = {
   empresa: EmpresaParceira
 }
@@ -91,6 +95,28 @@ function EmpresaButton({ empresa }: EmpresaButtonProps) {
 
       <div className="bg-secondary/80 p-2 rounded-full flex-shrink-0">
         <Building2 className="h-5 w-5 text-white" />
+      </div>
+    </Button>
+  )
+}
+
+function ProfessorButton({ professor }: { professor: ProfessorResponse }) {
+    const router = useRouter()
+  return (
+    <Button
+        className="flex items-center gap-3 h-10 p-2"
+        variant="ghost"
+        onClick={() => router.push("/perfil")}
+    >
+      <div className="flex flex-col justify-center items-end leading-tight">
+        <span className="font-medium text-white">{professor.nome}</span>
+        <span className="text-sm text-green-500 font-bold">
+          Saldo: R$ {professor.saldo.toFixed(2)}
+        </span>
+      </div>
+
+      <div className="bg-secondary/80 p-2 rounded-full flex-shrink-0">
+        <User className="h-5 w-5 text-white" />
       </div>
     </Button>
   )

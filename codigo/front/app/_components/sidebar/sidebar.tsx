@@ -18,10 +18,11 @@ import { routes } from "./routes";
 import { FiUsers } from "react-icons/fi";
 import Sessao from "@/lib/utils/Sessao";
 import { useEffect, useState } from "react";
-import { Contact, PackageOpen, FileText, Monitor, Calendar, House } from "lucide-react";
+import { CoinsIcon, House } from "lucide-react";
 
 export function AppSidebar() {
   const [isAdmin, setIsAdmin] = useState(false);
+  const decoded = Sessao.decodificarToken();
 
   useEffect(() => {
     const role = Sessao.buscarRole();
@@ -35,6 +36,14 @@ export function AppSidebar() {
       icon: <House />,
       root: true,
     },
+    ...(decoded?.tipo === "PROFESSOR" ? [
+      {
+        title: "Enviar moeda",
+        route: routes.enviarMoeda,
+        icon: <CoinsIcon />,
+        root: true,
+      },
+    ] : []),
     ...(isAdmin
       ? [
           {

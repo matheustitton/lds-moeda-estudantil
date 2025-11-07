@@ -3,6 +3,7 @@
 import { Utils } from '@/lib/utils/utils'
 import { AlunoRequisicao } from '@/server/Aluno'
 import { EmpresaRequisicao } from '@/server/Empresa'
+import { ProfessorRequisicao } from '@/server/Professor'
 import { EmpresaParceira } from '@/types/Empresa/empresa.response'
 import { ITipoUsuario, TipoUsuario } from '@/types/Usuario/enum'
 import { AlunoResponse } from '@/types/Usuario/usuario.response'
@@ -44,6 +45,12 @@ export function UsuarioContextProvider({ children }: UsuarioContextProviderProps
         });
     } else if(decoded?.tipo == TipoUsuario.EMPRESA_PARCEIRA){
         EmpresaRequisicao.GetById(Number(decoded.sub)).then((response) => {
+            console.log(response.data)
+            setUser(response.data)
+        });
+    }
+    else if(decoded?.tipo == TipoUsuario.PROFESSOR){
+        ProfessorRequisicao.GetById(Number(decoded.sub)).then((response) => {
             console.log(response.data)
             setUser(response.data)
         });
