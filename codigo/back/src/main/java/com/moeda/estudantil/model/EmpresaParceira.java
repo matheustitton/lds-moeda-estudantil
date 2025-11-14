@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Entity
 @Table(name = "empresa_parceira")
 @Getter
@@ -18,6 +21,9 @@ public class EmpresaParceira extends Usuario {
     @Column(name = "razao_social", nullable = false, length = 100)
     @Setter
     protected String razaoSocial;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Vantagem> vantagens = new LinkedList<>();
 
     public EmpresaParceira() {
         super();
