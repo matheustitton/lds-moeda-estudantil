@@ -55,8 +55,8 @@ export default function ListaVantagens() {
     }
 
     return (
-        <div className="w-full">
-            <div className="flex justify-end mb-6">
+        <div className="w-full p-6 bg-gray-50 rounded-lg shadow-md">
+            <div className="flex justify-begin mb-6">
                 <Button
                     onClick={() => {
                         setVantagemEdit(null);
@@ -128,7 +128,7 @@ export default function ListaVantagens() {
                     </div>
                 ))}
             </div>
-
+            
             <FormVantagem
                 open={openModal}
                 onClose={() => {
@@ -136,6 +136,7 @@ export default function ListaVantagens() {
                     setVantagemEdit(null);
                 }}
                 vantagem={vantagemEdit}
+                
             />
         </div>
     );
