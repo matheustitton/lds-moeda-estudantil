@@ -7,6 +7,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import Sessao from "@/lib/utils/Sessao";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 interface EmpresaParceiraDTO {
     id: number;
@@ -37,6 +39,19 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
         tipo: "PRODUTO",
         idEmpresaParceira: 0
     });
+
+    useEffect(() => {
+    if (open && !vantagem) {
+        setForm({
+            descricao: "",
+            custo: 0,
+            tipo: "PRODUTO",
+            idEmpresaParceira: 0
+        });
+
+        setImagem(null);
+    }
+}, [open, vantagem]);
 
     const [imagem, setImagem] = useState<File | null>(null);
 
@@ -161,23 +176,7 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                         ))}
                     </select>
 
-                    <div className="flex items-center gap-3">
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImagemChange}
-                            className="hidden"
-                            id="imagemUpload"
-                        />
-                        <label
-                            htmlFor="imagemUpload"
-                            className="cursor-pointer inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition"
-                        >
-                            Selecionar Imagem
-                        </label>
-                        {imagem && <span className="text-gray-700">{imagem.name}</span>}
-                    </div>
-
+                    <Dropzone imagem={imagem} setImagem={setImagem} />
 
                     <Button
                         onClick={() => mutation.mutate()}
@@ -188,5 +187,47 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                 </div>
             </DialogContent>
         </Dialog>
+    );
+}
+
+function Dropzone({ imagem, setImagem }: { imagem: File | null, setImagem: (f: File | null) => void }) {
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        if (acceptedFiles && acceptedFiles[0]) {
+            setImagem(acceptedFiles[0]);
+        }
+    }, [setImagem]);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: { "image/*": [] }
+    });
+
+    return (
+        <div
+            {...getRootProps()}
+            className={`
+                border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition
+                ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300 bg-gray-50 hover:bg-gray-100"}
+            `}
+        >
+            <input {...getInputProps()} />
+
+            {imagem ? (
+                <div className="flex flex-col items-center gap-2">
+                    <img
+                        src={URL.createObjectURL(imagem)}
+                        alt="Preview"
+                        className="w-24 h-24 object-cover rounded-lg shadow"
+                    />
+                    <span className="text-gray-700">{imagem.name}</span>
+                </div>
+            ) : (
+                <p className="text-gray-600">
+                    {isDragActive
+                        ? "Solte a imagem aqui..."
+                        : "Arraste e solte uma imagem aqui, ou clique para selecionar"}
+                </p>
+            )}
+        </div>
     );
 }

@@ -1,17 +1,17 @@
-import ListaVantagens from "../../vantagens/_components/ListaVantagens";
+import ListaVantagens from "./_components/ListaVantagens";
 
-export default function VantagensPage() {
+export default function EnviarMoeda() {
     return (
-        <div className="font-sans min-h-screen bg-gray-50 p-6 sm:p-12 flex flex-col items-center">
-            {/* Título */}
-            <h1 className="text-3xl sm:text-4xl font-bold text-primary mb-8 text-center sm:text-left">
-                Vantagens Cadastradas - Minha Empresa
+        <div className="p-6">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+                Vantagens Disponíveis
             </h1>
 
-            {/* Lista de Vantagens */}
-            <div className="w-full max-w-7xl">
-                <ListaVantagens />
-            </div>
+            <p className="text-gray-600 mb-6">
+                Aqui você pode visualizar, cadastrar e gerenciar todas as vantagens disponíveis para os alunos.
+            </p>
+
+            <ListaVantagens />
         </div>
     );
 }

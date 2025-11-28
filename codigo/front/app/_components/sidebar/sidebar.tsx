@@ -18,7 +18,7 @@ import { routes } from "./routes";
 import { FiUsers } from "react-icons/fi";
 import Sessao from "@/lib/utils/Sessao";
 import { useEffect, useState } from "react";
-import { CoinsIcon, House } from "lucide-react";
+import { CoinsIcon, Gift, House } from "lucide-react";
 
 export function AppSidebar() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -29,27 +29,42 @@ export function AppSidebar() {
     setIsAdmin(role === "Administrador");
   }, []);
 
-  const mockItems: SidebarConfigItem[] = [
+ const mockItems: SidebarConfigItem[] = [
     {
       title: "Home",
       route: routes.home,
       icon: <House />,
       root: true,
     },
-    ...(decoded?.tipo === "PROFESSOR" ? [
-      {
-        title: "Enviar moeda",
-        route: routes.enviarMoeda,
-        icon: <CoinsIcon />,
-        root: true,
-      },
-      {
-        title: "Minhas transações",
-        route: routes.transacoes,
-        icon: <CoinsIcon />,
-        root: true,
-      }
-    ] : []),
+
+    ...(decoded?.tipo === "PROFESSOR"
+      ? [
+          {
+            title: "Enviar moeda",
+            route: routes.enviarMoeda,
+            icon: <CoinsIcon />,
+            root: true,
+          },
+          {
+            title: "Minhas transações",
+            route: routes.transacoes,
+            icon: <CoinsIcon />,
+            root: true,
+          },
+        ]
+      : []),
+
+    ...(decoded?.tipo === "EMPRESA_PARCEIRA"
+      ? [
+          {
+            title: "Vantagens",
+            route: routes.vantagens,
+            icon: <Gift />,
+            root: true,
+          },
+        ]
+      : []),
+
     ...(isAdmin
       ? [
           {
@@ -61,6 +76,7 @@ export function AppSidebar() {
         ]
       : []),
   ];
+
 
   return (
     <Sidebar collapsible="icon">

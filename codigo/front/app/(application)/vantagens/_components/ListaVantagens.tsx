@@ -98,7 +98,7 @@ export default function ListaVantagens() {
                                 </h2>
 
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger>
+                                    <DropdownMenuTrigger asChild>
                                         <Button variant="ghost" className="h-6 w-6 p-0">
                                             <BsThreeDots />
                                         </Button>
