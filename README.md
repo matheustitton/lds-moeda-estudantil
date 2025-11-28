@@ -7,7 +7,7 @@
 
 ---
 
-# 🏷️ Nome do Projeto 👨‍💻
+# 🏷️ EducaCoins 👨‍💻
 
 > [!NOTE]
 > Breve descrição do projeto. **Foque no principal valor/benefício.**  
@@ -37,7 +37,6 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/joaopauloaramuni/joaopauloaramuni/main.yml?branch=main)](https://github.com/joaopauloaramuni/joaopauloaramuni/actions/workflows/main.yml)
 [![Test Coverage](https://codecov.io/gh/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software/branch/main/graph/badge.svg)](https://codecov.io/gh/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software)
 [![Versão](https://img.shields.io/badge/Versão-v1.0.0-blue)](https://github.com/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software/releases)
-[![Licença](https://img.shields.io/github/license/joaopauloaramuni/laboratorio-de-desenvolvimento-de-software)](#licença)
 
 ### Outros exemplos de badges:
 
@@ -93,40 +92,39 @@
 ---
 
 ## 📝 Sobre o Projeto
-Nesta seção, descreva de forma clara e objetiva **o propósito do seu projeto**, explicando:
+O sistema de mérito estudantil tem como objetivo promover o reconhecimento acadêmico por meio de uma moeda virtual distribuída por professores a seus alunos. Ele foi idealizado para facilitar e organizar um processo de valorização do desempenho estudantil, oferecendo uma plataforma completa para cadastro, distribuição, consulta e resgate dessas moedas.
 
-- **Por que ele existe** — qual motivação levou à sua criação.  
-- **Qual problema ele resolve** — que dor, necessidade ou oportunidade ele atende.  
-- **Qual o contexto** — acadêmico, profissional, pessoal, experimental, etc.  
-- **Onde ele pode ser utilizado** — cenários reais ou simulados.  
+O projeto surge da necessidade de formalizar e automatizar práticas de incentivo já adotadas por algumas instituições, permitindo um controle mais transparente, eficiente e seguro das transações entre professores, alunos e empresas parceiras. Dessa forma, ele resolve problemas como falta de rastreabilidade, dificuldade de gestão de recompensas e ausência de integração entre os envolvidos.
 
-Procure responder perguntas como:
-- *Qual foi a ideia inicial do projeto?*
-- *O que ele entrega de valor ao usuário?*
-- *Por que alguém utilizaria ou contribuiria com esse projeto?*
-- *O que o torna relevante ou interessante?*
+Desenvolvido em um contexto acadêmico, o sistema pode ser usado em universidades, escolas ou qualquer instituição de ensino que deseja implementar um programa de mérito baseado em recompensas não financeiras. Além disso, empresas parceiras podem integrar-se ao sistema oferecendo vantagens que os alunos podem resgatar utilizando as moedas recebidas.
 
-Escreva de forma objetiva, mas completa, para que qualquer pessoa entenda rapidamente **o que é** e **por que importa**.
+**A plataforma abrange todo o ciclo**:
+- cadastro de alunos, professores e parceiros;
+- distribuição de moedas e notificação automática;
+- controle de saldo e extratos;
+- gerenciamento de vantagens;
+- resgate de recompensas com geração de cupom e autenticação obrigatória para todos os usuários.
 
-> [!NOTE]
-> Esta seção segue boas práticas de documentação profissional e deve ser ajustada conforme o tipo e o objetivo do seu projeto.
-
----
+Com isso, o projeto oferece uma solução prática e integrada para incentivar a participação acadêmica e fortalecer o relacionamento entre instituições, alunos e empresas parceiras.
 
 ## ✨ Funcionalidades Principais
 Liste as funcionalidades de forma clara e objetiva.
 
-- 🔐 **Autenticação Segura:** Login, Cadastro e Recuperação de Senha.
-- 📈 **Painel de Controle:** Visualização de dados em tempo real com gráficos.
-- ⚙️ **Gerenciamento de CRUD:** Criação, Leitura, Atualização e Deleção de recursos (e.g., Usuários, Itens, Posts).
-- 📊 **Relatórios Exportáveis:** Exportação de dados em PDF, CSV ou Excel.
-- 🌐 **Internacionalização (i18n):** Suporte a múltiplos idiomas.
-- 🧵 **Logs e Monitoramento:** Registro detalhado de atividades e análise de desempenho.
-- 🔄 **Integração com APIs Externas:** Conexão com serviços de terceiros (pagamentos, mapas, autenticação, etc.).
-- 📨 **Sistema de Notificações:** Envio de alertas por e-mail, push ou notificações internas.
+- 🔐 Autenticação de Usuários: Login e acesso seguro para alunos, professores e empresas parceiras.
+- 🧑‍🎓 Cadastro de Alunos: Registro de dados pessoais, acadêmicos e associação a uma instituição.
+- 👨‍🏫 Gestão de Professores: Professores pré-cadastrados com vínculo institucional, CPF e departamento.
+- 🏫 Instituições Pré-Cadastradas: Seleção de instituição no momento do cadastro do aluno.
+- 💰 Saldo de Moedas para Professores: Recebimento automático de 1.000 moedas por semestre, com saldo acumulativo.
+- 🎁 Envio de Moedas aos Alunos: Professores podem transferir moedas informando valor e justificativa obrigatória.
+- 📩 Notificação por E-mail: Alunos recebem e-mail ao ganhar moedas; empresas recebem e-mail quando vantagens são resgatadas.
+- 📜 Extrato de Transações: Consulta completa de envios, recebimentos e trocas de moedas.
+- 🛍️ Catálogo de Vantagens: Listagem de benefícios cadastrados pelas empresas parceiras (desconto, produtos, serviços, etc.).
+- 🏢 Cadastro de Empresas Parceiras: Empresas podem cadastrar vantagens informando descrição, foto e custo em moedas.
+- 🔄 Resgate de Vantagens: Alunos podem trocar moedas por benefícios, com geração de cupom e código único de verificação.
+- 🧾 Controle de Saldos: Atualização automática do saldo ao enviar ou resgatar moedas.
+- 🛡️ Validação de Transações: Código único enviado ao aluno e à empresa para conferência da troca presencial.
 
 ---
-
 ## 🛠 Tecnologias Utilizadas
 
 As seguintes ferramentas, frameworks e bibliotecas foram utilizados na construção deste projeto. Recomenda-se o uso das versões listadas (ou superiores) para garantir a compatibilidade.
