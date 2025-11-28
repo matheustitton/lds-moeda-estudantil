@@ -9,10 +9,6 @@
 
 # 🏷️ EducaCoins 👨‍💻
 
-> [!NOTE]
-> Breve descrição do projeto. **Foque no principal valor/benefício.**  
-> Crie uma **logo** para o projeto que represente a aplicação em questão.
-
 <table>
   <tr>
     <td width="800px">
