@@ -161,15 +161,23 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                         ))}
                     </select>
 
-                    <label className="flex flex-col gap-2 text-primary">
-                        <span>Imagem</span>
+                    <div className="flex items-center gap-3">
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleImagemChange}
-                            className="border-dashed border-2 border-secondary rounded-xl p-3 cursor-pointer hover:border-primary transition"
+                            className="hidden"
+                            id="imagemUpload"
                         />
-                    </label>
+                        <label
+                            htmlFor="imagemUpload"
+                            className="cursor-pointer inline-block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition"
+                        >
+                            Selecionar Imagem
+                        </label>
+                        {imagem && <span className="text-gray-700">{imagem.name}</span>}
+                    </div>
+
 
                     <Button
                         onClick={() => mutation.mutate()}
