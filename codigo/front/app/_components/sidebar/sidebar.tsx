@@ -18,7 +18,7 @@ import { routes } from "./routes";
 import { FiUsers } from "react-icons/fi";
 import Sessao from "@/lib/utils/Sessao";
 import { useEffect, useState } from "react";
-import { CoinsIcon, Gift, House } from "lucide-react";
+import { CoinsIcon, Gift, HandCoins, House } from "lucide-react";
 
 export function AppSidebar() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -64,6 +64,23 @@ export function AppSidebar() {
           },
         ]
       : []),
+
+    ...(decoded?.tipo === "ALUNO"
+    ? [
+        {
+          title: "Trocar moedas",
+          route: routes.trocas,
+          icon: <HandCoins />,
+          root: true,
+        },
+        {
+            title: "Minhas trocas",
+            route: routes.minhasTrocas,
+            icon: <Gift />,
+            root: true,
+          },
+      ]
+    : []),
 
     ...(isAdmin
       ? [

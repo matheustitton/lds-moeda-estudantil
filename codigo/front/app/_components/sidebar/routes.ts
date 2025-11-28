@@ -4,5 +4,7 @@ export const routes = {
   agenda: "/agenda",
   enviarMoeda: "/enviar-moeda",
   transacoes: "/minhas-transacoes",
-  vantagens: "/vantagens"
+  vantagens: "/vantagens",
+  trocas: "/trocas",
+  minhasTrocas: "/minhas-trocas"
 };

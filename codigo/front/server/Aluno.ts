@@ -1,6 +1,7 @@
 import { ResponseDto } from "@/types/response";
 import { requisicaoBase } from "./requisicao.base";
 import { AlunoResponse } from "@/types/Usuario/usuario.response";
+import { TrocaAlunoDTO } from "@/types/Troca/TrocaCreateRequestDTO";
 
 export class AlunoRequisicao {
 
@@ -20,6 +21,10 @@ export class AlunoRequisicao {
 
     static async Editar(alunoId: number, aluno: AlunoUpdateRequest): Promise<ResponseDto<AlunoResponse>> {
         return requisicaoBase(`${this.ENDPOINT}/${alunoId}/id=${alunoId}`, "PUT", undefined, aluno);
+    }
+
+    static async BuscarMinhasTrocas(alunoId: number): Promise<ResponseDto<TrocaAlunoDTO>> {
+        return requisicaoBase(`${this.ENDPOINT}/${alunoId}/trocas`, "GET", undefined);    
     }
 }
 
