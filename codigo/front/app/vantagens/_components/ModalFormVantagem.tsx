@@ -29,7 +29,6 @@ interface Props {
 }
 
 export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
-
     const queryClient = useQueryClient();
 
     const [form, setForm] = useState({
@@ -41,7 +40,6 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
 
     const [imagem, setImagem] = useState<File | null>(null);
 
-    // Busca empresas
     const { data: empresas } = useQuery<EmpresaParceiraDTO[]>({
         queryKey: ["empresas"],
         queryFn: async () => {
@@ -67,7 +65,6 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
     const mutation = useMutation({
         mutationFn: async () => {
             const token = Sessao.buscarTokenAcesso();
-
             const formData = new FormData();
             formData.append("dto", new Blob([JSON.stringify(form)], { type: "application/json" }));
             if (imagem) formData.append("imagem", imagem);
@@ -115,9 +112,11 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{vantagem ? "Editar Vantagem" : "Cadastrar Vantagem"}</DialogTitle>
+            <DialogContent className="max-w-md w-full rounded-3xl p-6 bg-white shadow-2xl">
+                <DialogHeader className="border-b border-gray-200 mb-6 pb-2">
+                    <DialogTitle className="text-2xl font-bold text-primary">
+                        {vantagem ? "Editar Vantagem" : "Cadastrar Vantagem"}
+                    </DialogTitle>
                 </DialogHeader>
 
                 <div className="flex flex-col gap-4">
@@ -126,6 +125,7 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                         name="descricao"
                         value={form.descricao}
                         onChange={handleChange}
+                        className="text-primary border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent rounded-xl shadow-sm"
                     />
 
                     <Input
@@ -134,13 +134,14 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                         name="custo"
                         value={form.custo}
                         onChange={handleChange}
+                        className="border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent rounded-xl shadow-sm"
                     />
 
                     <select
                         name="tipo"
                         value={form.tipo}
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded-md"
+                        className="border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent rounded-xl px-4 py-2 shadow-sm bg-white text-primary"
                     >
                         <option value="DESCONTO">DESCONTO</option>
                         <option value="PRODUTO">PRODUTO</option>
@@ -150,7 +151,7 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                         name="idEmpresaParceira"
                         value={form.idEmpresaParceira}
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded-md"
+                        className="border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent rounded-xl px-4 py-2 shadow-sm bg-white text-primary"
                     >
                         <option value={0}>Selecione uma empresa</option>
                         {(empresas || []).map(emp => (
@@ -160,15 +161,20 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                         ))}
                     </select>
 
-                    {/* Upload de imagem */}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImagemChange}
-                        className="border px-3 py-2 rounded-md"
-                    />
+                    <label className="flex flex-col gap-2 text-primary">
+                        <span>Imagem</span>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImagemChange}
+                            className="border-dashed border-2 border-secondary rounded-xl p-3 cursor-pointer hover:border-primary transition"
+                        />
+                    </label>
 
-                    <Button onClick={() => mutation.mutate()}>
+                    <Button
+                        onClick={() => mutation.mutate()}
+                        className="bg-primary hover:bg-primary/90 text-white font-semibold rounded-2xl py-3 transition-all shadow-md"
+                    >
                         {vantagem ? "Salvar Alterações" : "Cadastrar"}
                     </Button>
                 </div>
