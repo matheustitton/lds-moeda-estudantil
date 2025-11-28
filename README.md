@@ -88,7 +88,7 @@ As seguintes ferramentas, frameworks e bibliotecas foram utilizados na construç
 ![Turbopack](https://img.shields.io/badge/Build-Turbopack-orange?style=for-the-badge&logo=vercel&logoColor=white)
 
 #### 🖥️ Back-end
-![Java](https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=openjdk&logoColor=white)
+![Java](https://img.shields.io/badge/Java-21-007396?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6db33f?style=for-the-badge&logo=springboot&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169e1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Hibernate](https://img.shields.io/badge/Hibernate-ORM-59666c?style=for-the-badge&logo=hibernate&logoColor=white)
