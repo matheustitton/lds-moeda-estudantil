@@ -143,10 +143,10 @@ Essa abordagem foi escolhida por oferecer clareza na separação de responsabili
 
 A arquitetura é dividida em quatro camadas principais:
 
-1 - Controller — responsável por receber e responder às requisições da API.
-2 - Service — concentra as regras de negócio e validações.
-3 - Model — representa as entidades e o domínio da aplicação.
-4 - Repository — camada de acesso a dados.
+1. Controller — responsável por receber e responder às requisições da API.
+2. Service — concentra as regras de negócio e validações.
+3. Model — representa as entidades e o domínio da aplicação.
+4. pository — camada de acesso a dados.
 
 Essa abordagem segue o padrão MVC, porém com a adição de uma camada Service para isolar a lógica de negócios da lógica de controle, garantindo maior testabilidade e modularidade.
 
