@@ -19,6 +19,7 @@ interface VantagemDTO {
     custo: number;
     tipo: string;
     empresaParceira: EmpresaParceiraDTO | null;
+    imagemUrl?: string;
 }
 
 interface Props {
@@ -38,15 +39,15 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
         idEmpresaParceira: 0
     });
 
-    // Busca empresas com token JWT
+    const [imagem, setImagem] = useState<File | null>(null);
+
+    // Busca empresas
     const { data: empresas } = useQuery<EmpresaParceiraDTO[]>({
         queryKey: ["empresas"],
         queryFn: async () => {
             const token = Sessao.buscarTokenAcesso();
             const resp = await api.get("/api/empresas-parceiras", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` }
             });
             return resp.data;
         }
@@ -66,40 +67,50 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
     const mutation = useMutation({
         mutationFn: async () => {
             const token = Sessao.buscarTokenAcesso();
-            const payload = {
-                descricao: form.descricao,
-                custo: form.custo,
-                tipo: form.tipo,
-                idEmpresaParceira: form.idEmpresaParceira
-            };
+
+            const formData = new FormData();
+            formData.append("dto", new Blob([JSON.stringify(form)], { type: "application/json" }));
+            if (imagem) formData.append("imagem", imagem);
 
             if (vantagem) {
-                await api.put(`/api/vantagens/${vantagem.id}`, payload, {
-                    headers: { Authorization: `Bearer ${token}` }
+                await api.put(`/api/vantagens/${vantagem.id}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data"
+                    }
                 });
             } else {
-                await api.post("/api/vantagens", payload, {
-                    headers: { Authorization: `Bearer ${token}` }
+                await api.post("/api/vantagens", formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data"
+                    }
                 });
             }
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["vantagens"] });
             onClose();
+            setImagem(null);
         },
         onError: (err: any) => {
             console.error("Erro ao salvar vantagem:", err.response?.data || err);
-            alert("Erro ao salvar vantagem. Verifique se você está autenticado e se todos os campos foram preenchidos corretamente.");
+            alert("Erro ao salvar vantagem. Verifique os campos e autenticação.");
         }
     });
 
     function handleChange(e: ChangeEvent<any>) {
         const { name, value } = e.target;
-
         setForm(prev => ({
             ...prev,
             [name]: name === "custo" || name === "idEmpresaParceira" ? Number(value) : value
         }));
+    }
+
+    function handleImagemChange(e: ChangeEvent<HTMLInputElement>) {
+        if (e.target.files && e.target.files[0]) {
+            setImagem(e.target.files[0]);
+        }
     }
 
     return (
@@ -132,7 +143,7 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                         className="border px-3 py-2 rounded-md"
                     >
                         <option value="DESCONTO">DESCONTO</option>
-                        <option value="PROMOCAO">PRODUTO</option>
+                        <option value="PRODUTO">PRODUTO</option>
                     </select>
 
                     <select
@@ -148,6 +159,14 @@ export default function ModalFormVantagem({ open, onClose, vantagem }: Props) {
                             </option>
                         ))}
                     </select>
+
+                    {/* Upload de imagem */}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImagemChange}
+                        className="border px-3 py-2 rounded-md"
+                    />
 
                     <Button onClick={() => mutation.mutate()}>
                         {vantagem ? "Salvar Alterações" : "Cadastrar"}

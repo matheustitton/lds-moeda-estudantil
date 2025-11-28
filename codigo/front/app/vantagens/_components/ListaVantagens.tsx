@@ -25,7 +25,7 @@ interface VantagemDTO {
     custo: number;
     tipo: string;
     empresaParceira: EmpresaParceiraDTO | null;
-    imagemUrl?: string; // Opcional para futura imagem
+    imagemUrl?: string; 
 }
 
 export default function ListaVantagens() {
@@ -76,7 +76,7 @@ export default function ListaVantagens() {
                         {/* ESPAÇO PARA IMAGEM */}
                         <div className="w-full h-32 bg-gray-200 rounded-md mb-3 flex items-center justify-center overflow-hidden">
                             <img
-                                src={vant.imagemUrl || "/placeholder-image.png"}
+                                src={`http://localhost:8080${vant.imagemUrl || "/placeholder-image.png"}`}
                                 alt={vant.descricao}
                                 className="object-cover w-full h-full"
                             />

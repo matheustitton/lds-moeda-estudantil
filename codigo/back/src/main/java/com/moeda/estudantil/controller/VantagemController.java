@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,15 +22,35 @@ public class VantagemController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> criar(@RequestBody @Valid VantagemCreateRequestDTO dto) {
-        service.criar(dto);
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Void> criar(
+            @RequestPart("dto") @Valid VantagemCreateRequestDTO dto,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem
+    ) {
+        VantagemCreateRequestDTO dtoComImagem = new VantagemCreateRequestDTO(
+                dto.descricao(),
+                dto.custo(),
+                dto.tipo(),
+                dto.idEmpresaParceira(),
+                imagem
+        );
+        service.criar(dtoComImagem, imagem);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizar(@PathVariable Long id, @RequestBody @Valid VantagemUpdateRequestDTO dto) {
-        service.atualizar(id, dto);
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<Void> atualizar(
+            @PathVariable Long id,
+            @RequestPart("dto") @Valid VantagemUpdateRequestDTO dto,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem
+    ) {
+        VantagemUpdateRequestDTO dtoComImagem = new VantagemUpdateRequestDTO(
+                dto.descricao(),
+                dto.custo(),
+                dto.tipo(),
+                imagem
+        );
+        service.atualizar(id, dtoComImagem);
         return ResponseEntity.noContent().build();
     }
 
