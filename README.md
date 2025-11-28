@@ -150,10 +150,6 @@ A arquitetura é dividida em quatro camadas principais:
 
 Essa abordagem segue o padrão MVC, porém com a adição de uma camada Service para isolar a lógica de negócios da lógica de controle, garantindo maior testabilidade e modularidade.
 
-Controller → Service → Repository → Banco
-                ↓
-              Model
-
 ### 🧩 Componentes da Arquitetura
 
 1. Controller (Interface / Entrada da Aplicação)
