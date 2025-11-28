@@ -182,7 +182,6 @@ Essa abordagem segue o padrão MVC, porém com a adição de uma camada Service 
 ---
 
 ## 👥 Autores
-Liste os principais contribuidores. Você pode usar links para seus perfis.
 
 | 👤 Nome | 🖼️ Foto | :octocat: GitHub | 💼 LinkedIn |
 |---------|----------|-----------------|-------------|
