@@ -66,6 +66,12 @@ public class Aluno extends Usuario {
         this.saldo += valor;
     }
 
+    public boolean novaTroca(int valor) {
+        if (valor > saldo) return false;
+        saldo -= valor;
+        return true;
+    }
+
     public void adicionarTransacao(Merito pontuacao) {
         this.transacoes.add(pontuacao);
     }

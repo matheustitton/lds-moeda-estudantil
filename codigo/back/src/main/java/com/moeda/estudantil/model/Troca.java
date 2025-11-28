@@ -1,22 +1,16 @@
-/*package com.moeda.estudantil.model;
+package com.moeda.estudantil.model;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.ManyToAny;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-
+import com.moeda.estudantil.dto.troca.TrocaAlunoDTO;
+import com.moeda.estudantil.dto.troca.TrocaDTO;
+import com.moeda.estudantil.enums.EStatusTroca;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
+
 @Entity
-@Table (name = "troca")
+@Table(name = "troca")
 @Getter
 @Setter
 public class Troca {
@@ -25,33 +19,57 @@ public class Troca {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false)
-    private int valor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aluno_id", nullable = false)
+    private Aluno aluno;
 
-    @Column (nullable = false)
-    private LocalDateTime data;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vantagem_id", nullable = false)
+    private Vantagem vantagem;
 
-    @ManyToAny
-    @JoinColumn (name = "doador_id", nullable = false)
-    private Usuario doador;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EStatusTroca status = EStatusTroca.AGUARDANDO_RESGATE;
 
-    @ManyToAny
-    @JoinColumn (name = "recebedor_id", nullable = false)
-    private Usuario recebedor;
+    @Column(name = "data_hora")
+    private OffsetDateTime dataHora = OffsetDateTime.now();
 
-    // @Column (nullable = false, length = 255)
-    // @Getter @Setter
-    // private Vantagem vantagem;
-
-    public Troca(int valor, Usuario doador, Usuario recebedor) {
-        super(valor, doador, recebedor);
-        // this.vantagem = vantagem;
+    public Troca() {
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.data = LocalDateTime.now();
+    public Troca(Aluno aluno, Vantagem vantagem) {
+        if (!aluno.novaTroca(vantagem.getCusto()))
+            throw new RuntimeException("Saldo insuficiente.");
+
+        this.aluno = aluno;
+        this.vantagem = vantagem;
     }
 
+    public boolean cancelar() {
+        if (status == EStatusTroca.AGUARDANDO_RESGATE) {
+            status = EStatusTroca.CANCELADA;
+            return true;
+        }
+
+        return false;
+    }
+
+    public TrocaDTO toDto() {
+        return new TrocaDTO(
+                id,
+                aluno.toDto(),
+                vantagem.toDto(),
+                status,
+                dataHora
+        );
+    }
+
+    public TrocaAlunoDTO toTrocaAlunoDto() {
+        return new TrocaAlunoDTO(
+                id,
+                vantagem.toDto(),
+                status,
+                dataHora
+        );
+    }
 }
-*/

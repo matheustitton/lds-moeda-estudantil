@@ -4,21 +4,12 @@ import com.moeda.estudantil.dto.aluno.AlunoCreateRequestDTO;
 import com.moeda.estudantil.dto.aluno.AlunoDTO;
 import com.moeda.estudantil.dto.aluno.AlunoUpdateRequestDTO;
 import com.moeda.estudantil.dto.merito.MeritoAlunoDTO;
+import com.moeda.estudantil.dto.troca.TrocaAlunoDTO;
 import com.moeda.estudantil.service.AlunoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -61,5 +52,11 @@ public class AlunoController {
     public ResponseEntity<List<MeritoAlunoDTO>> buscarMeritos(@PathVariable Long id) {
         List<MeritoAlunoDTO> resposta = service.buscarMeritos(id);
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
+    }
+
+    @GetMapping("/{id}/trocas")
+    public ResponseEntity<List<TrocaAlunoDTO>> buscarTrocas(@PathVariable Long id) {
+        List<TrocaAlunoDTO> resposta = service.buscarTrocas(id);
+        return ResponseEntity.ok(resposta);
     }
 }
