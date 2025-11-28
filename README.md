@@ -123,21 +123,24 @@ Liste as funcionalidades de forma clara e objetiva.
 
 As seguintes ferramentas, frameworks e bibliotecas foram utilizados na construção deste projeto. Recomenda-se o uso das versões listadas (ou superiores) para garantir a compatibilidade.
 
-### 💻 Front-end
+#### 💻 Front-end
+![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-19-007ec6?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-latest-0ea5e9?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-latest-4433ff?style=for-the-badge&logo=react&logoColor=white)
+![Turbopack](https://img.shields.io/badge/Build-Turbopack-orange?style=for-the-badge&logo=vercel&logoColor=white)
 
-* **Framework/Biblioteca:** Next.js 15
-* **Linguagem/Superset:** TypeScript
-* **Estilização:** Tailwind CS
-* **Gerenciamento de Estado:** Zustand
-* **Build Tool:** Turbopack
-  
-### 🖥️ Back-end
+#### 🖥️ Back-end
+![Java](https://img.shields.io/badge/Java-17-007396?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6db33f?style=for-the-badge&logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169e1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Hibernate](https://img.shields.io/badge/Hibernate-ORM-59666c?style=for-the-badge&logo=hibernate&logoColor=white)
+![JWT](https://img.shields.io/badge/Auth-JWT-yellow?style=for-the-badge&logo=jsonwebtokens&logoColor=black)
+![OAuth2](https://img.shields.io/badge/Auth-OAuth2-blue?style=for-the-badge&logo=auth0&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Security-Spring_Security-6db33f?style=for-the-badge&logo=springsecurity&logoColor=white)
 
-* **Linguagem/Runtime:** Java 17
-* **Framework:** Spring Boot
-* **Banco de Dados:** PostgreSQL
-* **ORM / Query Builder:** Hibernate/JPA
-* **Autenticação:** JWT, OAuth2, Spring Security
+
 
 ### ⚙️ Infraestrutura & DevOps
 
