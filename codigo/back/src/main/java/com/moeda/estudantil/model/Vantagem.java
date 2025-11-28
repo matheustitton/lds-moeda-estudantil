@@ -29,23 +29,26 @@ public class Vantagem {
     @ManyToOne(fetch = FetchType.LAZY)
     private EmpresaParceira empresaParceira;
 
+    @Column(length = 1000)
+    private String imagemUrl; 
+
     public Vantagem() {}
 
-    public Vantagem(String descricao, int custo, ETipoVantagem tipo, EmpresaParceira empresaParceira) {
+    public Vantagem(String descricao, int custo, ETipoVantagem tipo, EmpresaParceira empresaParceira, String imagemUrl) {
         this.descricao = descricao;
         this.custo = (custo <= 0) ? 0 : custo;
         this.tipo = tipo;
         this.empresaParceira = empresaParceira;
+        this.imagemUrl = imagemUrl;
     }
 
     public void setCusto(int custo) {
         if (custo <= 0)
             throw new IllegalArgumentException("O custo da vantagem não pode ser negativo");
-
         this.custo = custo;
     }
 
     public VantagemDTO toDto() {
-        return new VantagemDTO(id, descricao, custo, tipo, empresaParceira.toDto());
+        return new VantagemDTO(id, descricao, custo, tipo, empresaParceira.toDto(), imagemUrl);
     }
 }

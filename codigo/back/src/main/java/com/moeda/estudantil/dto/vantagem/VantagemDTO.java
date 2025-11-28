@@ -8,6 +8,7 @@ public record VantagemDTO(
         String descricao,
         int custo,
         ETipoVantagem tipo,
-        EmpresaParceiraDTO empresaParceira
+        EmpresaParceiraDTO empresaParceira,
+        String imagemUrl
 ) {
 }

@@ -3,9 +3,9 @@ package com.moeda.estudantil.dto.vantagem;
 import com.moeda.estudantil.enums.ETipoVantagem;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 public record VantagemCreateRequestDTO(
-
         @NotBlank(message = "A descrição é obrigatória.")
         String descricao,
 
@@ -16,6 +16,7 @@ public record VantagemCreateRequestDTO(
         ETipoVantagem tipo,
 
         @NotNull
-        Long idEmpresaParceira
-) {
-}
+        Long idEmpresaParceira,
+
+        MultipartFile imagem
+) {}
