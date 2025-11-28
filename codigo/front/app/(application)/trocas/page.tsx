@@ -8,7 +8,7 @@ export default function EnviarMoeda() {
             </h1>
 
             <p className="text-gray-600 mb-6">
-                Aqui você pode visualizar, cadastrar e gerenciar todas as vantagens disponíveis para os alunos.
+                Aqui você pode visualizar e trocar suas moedas por vantagens disponíveis das nossas empresas parceiras.
             </p>
 
             <ListaVantagens />

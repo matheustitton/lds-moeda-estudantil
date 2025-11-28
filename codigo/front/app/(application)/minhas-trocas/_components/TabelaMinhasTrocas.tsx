@@ -9,20 +9,50 @@ import { TrocaAlunoDTO } from "@/types/Troca/TrocaCreateRequestDTO"
 import { AlunoRequisicao } from "@/server/Aluno"
 import { AlunoResponse } from "@/types/Usuario/usuario.response"
 
+function formatarStatus(status: string) {
+  switch (status) {
+    case "AGUARDANDO_RESGATE":
+      return "Aguardando resgate";
+    case "CONCLUIDA":
+      return "Concluída";
+    case "CANCELADA":
+      return "Cancelada";
+    default:
+      return status;
+  }
+}
+
+function BadgeStatus({ status }: { status: string }) {
+  const mapaCores: Record<string, string> = {
+    AGUARDANDO_RESGATE: "bg-yellow-200 text-yellow-800",
+    CONCLUIDA: "bg-green-200 text-green-800",
+    CANCELADA: "bg-red-200 text-red-800"
+  };
+
+  return (
+    <span
+      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+        mapaCores[status] ?? "bg-gray-200 text-gray-700"
+      }`}
+    >
+      {formatarStatus(status)}
+    </span>
+  );
+}
+
 export default function TabelaMinhasTrocas() {
   const { usuario } = useUsuario();
 
   const { data } = useQuery<TrocaAlunoDTO[]>({
     queryKey: ['trocas'],
     queryFn: async () => {
-    if (!usuario) return [];
-    const response = await AlunoRequisicao.BuscarMinhasTrocas((usuario as AlunoResponse).id);
+      if (!usuario) return [];
+      const response = await AlunoRequisicao.BuscarMinhasTrocas((usuario as AlunoResponse).id);
 
-    // Garante que sempre será um array
-    if (!response.data) return [];
-    return Array.isArray(response.data) ? response.data : [response.data];
-  }
-  })
+      if (!response.data) return [];
+      return Array.isArray(response.data) ? response.data : [response.data];
+    }
+  });
 
   const columns: ColumnDef<TrocaAlunoDTO>[] = [
     {
@@ -55,6 +85,10 @@ export default function TabelaMinhasTrocas() {
       ),
       cell: ({ row }) => <div>{row.original.vantagem.empresaParceira.razaoSocial}</div>
     },
+
+    // ----------------------------
+    // AQUI ESTÁ A COLUNA MODIFICADA COM BADGE
+    // ----------------------------
     {
       accessorKey: 'status',
       header: ({ column }) => (
@@ -63,8 +97,9 @@ export default function TabelaMinhasTrocas() {
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => <div>{row.original.status}</div>,
+      cell: ({ row }) => <BadgeStatus status={row.original.status} />
     },
+
     {
       accessorKey: 'dataHora',
       header: ({ column }) => (
@@ -73,36 +108,16 @@ export default function TabelaMinhasTrocas() {
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => <div>{new Date(row.original.dataHora).toLocaleString("pt-BR", {
-                                dateStyle: "short",
-                                timeStyle: "short"
-                              })}</div>,
+      cell: ({ row }) => (
+        <div>
+          {new Date(row.original.dataHora).toLocaleString("pt-BR", {
+            dateStyle: "short",
+            timeStyle: "short"
+          })}
+        </div>
+      ),
     },
-    // {
-    //   id: "actions",
-    //   enableHiding: false,
-    //   cell: ({ row }) => (
-    //     <DropdownMenu>
-    //       <DropdownMenuTrigger asChild>
-    //         <Button variant="ghost" className="h-8 w-8 !p-2">
-    //           <BsThreeDots />
-    //         </Button>
-    //       </DropdownMenuTrigger>
-    //       <DropdownMenuContent align="end">
-    //         <DropdownMenuItem
-    //           className="hover:cursor-pointer"
-    //           onClick={(e) => {
-    //             e.stopPropagation()
-    //             handleEnviarMoedas(row.original)
-    //           }}
-    //         >
-    //           Enviar moedas
-    //         </DropdownMenuItem>
-    //       </DropdownMenuContent>
-    //     </DropdownMenu>
-    //   ),
-    // },
-  ]
+  ];
 
   return (
     <div className="flex h-auto w-auto mx-8 align-middle">
@@ -112,5 +127,5 @@ export default function TabelaMinhasTrocas() {
         onClickRow={() => {}}
       />
     </div>
-  )
+  );
 }
