@@ -42,6 +42,14 @@ public class VantagemResgate {
 
     private boolean utilizado = false;
 
+    public VantagemResgate(Vantagem vantagem, Usuario aluno, String token) {
+        this.vantagem = vantagem;
+        this.aluno = aluno;
+        this.token = token;
+        this.utilizado = false;
+        this.dataGeracao = LocalDateTime.now();
+    }
+
     public boolean isUtilizado() {
         return utilizado;
     }

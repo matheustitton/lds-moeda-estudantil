@@ -17,7 +17,7 @@ public class TrocaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> criar(@RequestBody TrocaCreateRequestDTO dto) {
+    public ResponseEntity<Void> criar(@RequestBody TrocaCreateRequestDTO dto) throws Exception {
         service.criar(dto);
         return ResponseEntity.ok().build();
     }

@@ -13,21 +13,28 @@ import com.moeda.estudantil.util.EmailUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 
 @Service
 public class TrocaService {
 
+    private final String uploadRoot = "/tmp";
     private TrocaRepository repository;
     private AlunoRepository alunoRepository;
     private VantagemRepository vantagemRepository;
     private EmailService emailService;
+    private QrCodeService qrCodeService;
 
-    public TrocaService(TrocaRepository repository, AlunoRepository alunoRepository, VantagemRepository vantagemRepository, EmailService emailService) {
+    public TrocaService(TrocaRepository repository, AlunoRepository alunoRepository, VantagemRepository vantagemRepository, EmailService emailService, QrCodeService qrCodeService) {
         this.repository = repository;
         this.alunoRepository = alunoRepository;
         this.vantagemRepository = vantagemRepository;
         this.emailService = emailService;
+        this.qrCodeService = qrCodeService;
     }
 
     private Troca buscarPorId(Long id) {
@@ -35,14 +42,24 @@ public class TrocaService {
     }
 
     @Transactional
-    public void criar(TrocaCreateRequestDTO dto) {
+    public void criar(TrocaCreateRequestDTO dto) throws Exception {
         Aluno aluno = alunoRepository.findById(dto.idAluno()).orElseThrow(() -> new RuntimeException("Aluno não encontrado."));
         Vantagem vantagem = vantagemRepository.findById(dto.idVantagem()).orElseThrow(() -> new RuntimeException("Vantagem não encontrada."));
 
         Troca troca = new Troca(aluno, vantagem);
         repository.save(troca);
 
-        String corpoEmailTroca = EmailUtils.gerarEmailResgateVantagem(aluno.getNome(), vantagem.getDescricao(), vantagem.getCusto(), "tmp", "tmp");
+        byte[] qrcodeBytes = qrCodeService.gerar(vantagem, aluno);
+        String base64QrCode = Base64.getEncoder().encodeToString(qrcodeBytes);
+        String imgQrCodeHtml = "data:image/png;base64," + base64QrCode;
+
+        String caminhoFisico = uploadRoot + vantagem.getImagemUrl();
+        Path path = Paths.get(caminhoFisico);
+        byte[] imagemBytes = Files.readAllBytes(path);
+        String base64Imagem = Base64.getEncoder().encodeToString(imagemBytes);
+        String imagemHtml = "data:image/jpeg;base64," + base64Imagem;
+
+        String corpoEmailTroca = EmailUtils.gerarEmailResgateVantagem(aluno.getNome(), vantagem.getDescricao(), vantagem.getCusto(), imagemHtml, imgQrCodeHtml);
         emailService.enviarEmail(aluno.getEmail(), "\uD83C\uDF81 Sua vantagem foi resgatada com sucesso!",  corpoEmailTroca);
     }
 
