@@ -9,6 +9,7 @@ import com.moeda.estudantil.model.Vantagem;
 import com.moeda.estudantil.repository.AlunoRepository;
 import com.moeda.estudantil.repository.TrocaRepository;
 import com.moeda.estudantil.repository.VantagemRepository;
+import com.moeda.estudantil.util.EmailUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,13 @@ public class TrocaService {
     private TrocaRepository repository;
     private AlunoRepository alunoRepository;
     private VantagemRepository vantagemRepository;
+    private EmailService emailService;
 
-    public TrocaService(TrocaRepository repository, AlunoRepository alunoRepository, VantagemRepository vantagemRepository) {
+    public TrocaService(TrocaRepository repository, AlunoRepository alunoRepository, VantagemRepository vantagemRepository, EmailService emailService) {
         this.repository = repository;
         this.alunoRepository = alunoRepository;
         this.vantagemRepository = vantagemRepository;
+        this.emailService = emailService;
     }
 
     private Troca buscarPorId(Long id) {
@@ -38,6 +41,9 @@ public class TrocaService {
 
         Troca troca = new Troca(aluno, vantagem);
         repository.save(troca);
+
+        String corpoEmailTroca = EmailUtils.gerarEmailResgateVantagem(aluno.getNome(), vantagem.getDescricao(), vantagem.getCusto(), "tmp", "tmp");
+        emailService.enviarEmail(aluno.getEmail(), "\uD83C\uDF81 Sua vantagem foi resgatada com sucesso!",  corpoEmailTroca);
     }
 
     @Transactional
