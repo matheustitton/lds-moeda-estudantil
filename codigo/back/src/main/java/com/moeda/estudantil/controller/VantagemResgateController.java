@@ -57,9 +57,7 @@ public class VantagemResgateController {
      * ---------------------------------------------------------
      */
     @PostMapping("/{idVantagem}/{idAluno}")
-    public ResponseEntity<byte[]> gerarResgate(
-            @RequestBody VantagemDTO vantagemDTO,
-            @RequestBody AlunoDTO alunoDTO) throws Exception {
+    public ResponseEntity<byte[]> gerarResgate(@PathVariable Long idVantagem, @PathVariable Long idAluno) throws Exception {
 
         String token = UUID.randomUUID().toString();
 
@@ -67,8 +65,8 @@ public class VantagemResgateController {
         resgate.setToken(token);
         resgate.setUtilizado(false);
         resgate.setDataGeracao(LocalDateTime.now());
-        com.moeda.estudantil.model.Vantagem vantagem = vantagemRepository.findById(vantagemDTO.id()).orElseThrow();
-        com.moeda.estudantil.model.Aluno aluno = alunoRepository.findById(alunoDTO.id()).orElseThrow();
+        com.moeda.estudantil.model.Vantagem vantagem = vantagemRepository.findById(idVantagem).orElseThrow();
+        com.moeda.estudantil.model.Aluno aluno = alunoRepository.findById(idAluno).orElseThrow();
         resgate.setVantagem(vantagem);
         resgate.setAluno(aluno);
         repository.save(resgate);
