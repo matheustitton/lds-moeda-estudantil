@@ -151,6 +151,162 @@ Essa abordagem segue o padrão MVC, porém com a adição de uma camada Service 
 
 ---
 
+
+## 🚀 Deploy
+Instruções para deploy em produção.
+
+1.  **Build do Projeto:**
+    Execute o build separadamente para os dois artefatos (Azure para o Back-end e Vercel para o Front-end).
+
+```bash
+# 1. Build do Front-end (Next.js) 
+cd frontend
+npm run build
+
+# 2. Build do Back-end (Spring Boot/Maven) - Gera o arquivo .jar executável em /target
+cd ../back
+docker compose up -d --build
+```
+
+2.  **Configuração do Ambiente de Produção:** Defina as variáveis de ambiente no seu provedor (e.g., Vercel, Railway, Heroku, DigitalOcean).
+
+> 🔑 **Variáveis Cruciais:** Para executar o projeto corretamente, é necessário configurar as seguintes variáveis de ambiente no seu sistema ou no arquivo .env. Elas garantem que o banco de dados PostgreSQL, o servidor Spring Boot e o serviço de envio de e-mails funcionem adequadamente. Abaixo estão as variáveis necessárias, juntamente com exemplos de valores que você pode ajustar conforme sua configuração:
+>
+> POSTGRES_USER=admin
+> 
+> POSTGRES_PASSWORD=senha123
+> 
+> POSTGRES_DATABASE=educa_db
+> 
+> POSTGRES_LOCAL_PORT=5432
+> 
+> POSTGRES_DOCKER_PORT=5432
+> 
+> SPRING_LOCAL_PORT=8080
+>
+> SPRING_DOCKER_PORT=8080
+> 
+> MAIL_USERNAME=seuemail@gmail.com]
+> 
+> MAIL_PASSWORD=suasenhadeaplicativo
+
+3.  **Execução em Produção:**
+    Instruções de Deploy (Azure + Vercel)
+
+Este guia descreve como implantar o projeto em produção utilizando:
+
+Azure → Back-end (Spring Boot) + Banco de Dados (PostgreSQL via Docker)
+
+Vercel → Front-end (Next.js)
+
+##🌐 Deploy do Back-end na Azure
+
+O back-end foi implantado em uma Máquina Virtual (VM) na Microsoft Azure com:
+
+* 1 GB de RAM
+
+* 30 GB de SSD
+
+* Ubuntu Server
+
+* Docker + Docker Compose instalados
+
+##1️⃣ Criar e Preparar a Máquina Virtual
+
+Acesse o portal: https://portal.azure.com
+
+Vá em Máquinas Virtuais → Criar
+
+Configure:
+
+* Imagem: Ubuntu Server LTS
+
+* Tamanho: B1s (1 vCPU, 1GB RAM)
+
+* Disco: 30 GB SSD
+
+* Liberar portas na criação:
+
+:22 (SSH)
+
+:8080 (API Spring)
+
+:5432 (Postgres, se necessário externo)
+
+Criar.
+
+##2️⃣ Acessar a VM via SSH]
+```bash
+ssh usuario@ip_da_vm
+```
+
+##3️⃣ Instalar Docker e Docker Compose
+```bash
+sudo apt update
+sudo apt install docker.io -y
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+Instalar Docker Compose:
+```bash
+sudo apt install docker-compose -y
+```
+
+##4️⃣ Enviar o Back-end para a VM
+
+Na sua máquina local:
+```bash
+scp -r ./back usuario@ip_da_vm:/home/usuario/
+```
+##5️⃣ Configurar Variáveis de Ambiente
+
+Na Azure (na própria VM), crie um arquivo .env dentro da pasta /back.nano .env
+
+Cole:
+``` bash
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=senha123
+POSTGRES_DATABASE=educa_db
+POSTGRES_LOCAL_PORT=5432
+POSTGRES_DOCKER_PORT=5432
+
+SPRING_LOCAL_PORT=8080
+SPRING_DOCKER_PORT=8080
+
+MAIL_USERNAME=seuemail@gmail.com
+MAIL_PASSWORD=suasenhadeaplicativo
+```
+
+##6️⃣ Executar o Back-end
+
+Dentro da pasta /back:
+```bash
+docker compose up -d --build
+```
+
+Isso inicia:
+
+PostgreSQL (via Docker)
+
+API Spring Boot (via JAR em container)
+
+Checar logs:
+
+```bash
+docker logs nome_do_container
+```
+
+##7️⃣ Verificar se está no ar
+
+A API estará acessível pelo IP público da VM:
+
+http://SEU_IP_PUBLICO:8080
+
+**Video utilizado como suporte: [(Video)](https://www.youtube.com/watch?v=qKGSn2xdX1Y)**
+
+---
+
 ## 👥 Autores
 
 | 👤 Nome | 🖼️ Foto | :octocat: GitHub | 💼 LinkedIn |
