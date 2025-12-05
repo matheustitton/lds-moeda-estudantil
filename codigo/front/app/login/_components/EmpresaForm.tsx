@@ -35,7 +35,7 @@ export default function FormEmpresaParceira({ onVoltarLogin }: { onVoltarLogin: 
 
   const handleSubmit = async (values: FormData) => {
     try {
-      const response = await api.post('http://localhost:8080/api/empresas-parceiras', values)
+      const response = await api.post('http://48.217.82.183:8080/api/empresas-parceiras', values)
 
       if (response.status === 201 || response.status === 200) {
         queryClient.invalidateQueries({ queryKey: ['empresas'] })

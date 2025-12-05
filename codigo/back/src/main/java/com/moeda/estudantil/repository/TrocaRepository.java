@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TrocaRepository extends JpaRepository<Troca, Long> {
     List<Troca> findByAluno_Id(Long id);
+    Troca findByAluno_IdAndVantagem_Id(Long alunoId, Long vantagemId);
 }

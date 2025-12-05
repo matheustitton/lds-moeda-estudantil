@@ -21,7 +21,7 @@ export default function ResgatarVantagemPage({ vantagemId, descricao, imagemUrl 
             setMsg("");
 
             const response = await axios.post(
-                `http://localhost:8080/api/vantagens/${vantagemId}/resgatar`,
+                `http://48.217.82.183:8080/api/vantagens/${vantagemId}/resgatar`,
                 {},
                 { withCredentials: true }
             );

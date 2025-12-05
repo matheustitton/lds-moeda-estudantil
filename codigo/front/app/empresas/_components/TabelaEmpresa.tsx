@@ -18,7 +18,7 @@ export default function TabelaEmpresas() {
   const { data, refetch } = useQuery<EmpresaParceira[]>({
     queryKey: ['empresas'],
     queryFn: async () => {
-      const response = await api.get('http://localhost:8080/api/empresas-parceiras')
+      const response = await api.get('http://48.217.82.183:8080/api/empresas-parceiras')
       return response.data
     }
   })

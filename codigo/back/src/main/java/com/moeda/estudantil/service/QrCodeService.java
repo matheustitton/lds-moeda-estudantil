@@ -13,7 +13,7 @@ import java.util.UUID;
 @Service
 public class QrCodeService {
 
-    private final String url = "48.217.82.183:8080/api/resgate/";
+    private final String url = "http://48.217.82.183:8080/api/resgate/";
     private final VantagemResgateRepository repository;
 
     public QrCodeService(VantagemResgateRepository repository) {

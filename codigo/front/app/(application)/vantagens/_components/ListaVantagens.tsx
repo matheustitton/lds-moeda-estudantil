@@ -84,7 +84,7 @@ export default function ListaVantagens() {
                             {/* Imagem */}
                             <div className="w-full h-36 bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center">
                                 <img
-                                    src={`http://localhost:8080${vant.imagemUrl || "/placeholder-image.png"}`}
+                                    src={`http://48.217.82.183:8080${vant.imagemUrl || "/placeholder-image.png"}`}
                                     alt={vant.descricao}
                                     className="object-cover w-full h-full"
                                     loading="lazy"

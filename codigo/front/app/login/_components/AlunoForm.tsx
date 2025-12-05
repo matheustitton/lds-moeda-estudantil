@@ -51,14 +51,14 @@ export default function FormAluno({ onVoltarLogin }: { onVoltarLogin: () => void
   const { data: instituicoes, isLoading: carregandoInstituicoes } = useQuery({
     queryKey: ['instituicoes'],
     queryFn: async () => {
-      const response = await api.get('http://localhost:8080/api/instituicoes-ensino')
+      const response = await api.get('http://48.217.82.183:8080/api/instituicoes-ensino')
       return response.data
     }
   })
 
   const handleSubmit = async (values: FormData) => {
     try {
-      const response = await api.post('http://localhost:8080/api/alunos', values)
+      const response = await api.post('http://48.217.82.183:8080/api/alunos', values)
 
       if (response.status === 201 || response.status === 200) {
         queryClient.invalidateQueries({ queryKey: ['usuarios'] })

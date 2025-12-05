@@ -2,9 +2,12 @@ package com.moeda.estudantil.controller;
 
 import com.moeda.estudantil.dto.aluno.AlunoDTO;
 import com.moeda.estudantil.dto.vantagem.VantagemDTO;
+import com.moeda.estudantil.enums.EStatusTroca;
 import com.moeda.estudantil.model.Aluno;
+import com.moeda.estudantil.model.Troca;
 import com.moeda.estudantil.model.VantagemResgate;
 import com.moeda.estudantil.repository.AlunoRepository;
+import com.moeda.estudantil.repository.TrocaRepository;
 import com.moeda.estudantil.repository.VantagemRepository;
 import com.moeda.estudantil.repository.VantagemResgateRepository;
 import com.moeda.estudantil.util.QRCodeUtil;
@@ -26,6 +29,7 @@ public class VantagemResgateController {
     private final VantagemResgateRepository repository;
     private final VantagemRepository vantagemRepository;
     private final AlunoRepository alunoRepository;
+    private final TrocaRepository trocaRepository;
 
     /**
      * ---------------------------------------------------------
@@ -45,6 +49,13 @@ public class VantagemResgateController {
                     resgate.setUtilizado(true);
                     resgate.setDataUtilizacao(LocalDateTime.now());
                     repository.save(resgate);
+
+                    Troca troca = trocaRepository.findByAluno_IdAndVantagem_Id(resgate.getAluno().getId(), resgate.getVantagem().getId());
+
+                    if (troca != null) {
+                        troca.setStatus(EStatusTroca.CONCLUIDA);
+                        trocaRepository.save(troca);
+                    }
 
                     return ResponseEntity.ok("Vantagem resgatada com sucesso!");
                 })
