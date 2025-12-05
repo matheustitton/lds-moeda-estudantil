@@ -1,0 +1,59 @@
+
+name: Deploy
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  lds-moeda-estudantil:
+    name: Lab. de Desenvolvimento de Software - Moeda Estudantil
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Copy MoedaEstudantil to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          # Github path
+          source: "codigo/back/**"
+          # VPS path
+          target: "~/lds-moeda-estudantil"
+
+      - name: Create MoedaEstudantil .env file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/lds-moeda-estudantil/codigo/back
+            rm .env
+            touch .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }} >> .env
+            echo POSTGRES_LOCAL_PORT=${{ secrets.POSTGRES_LOCAL_PORT }} >> .env
+            echo POSTGRES_DOCKER_PORT=${{ secrets.POSTGRES_DOCKER_PORT }} >> .env
+            echo SPRING_LOCAL_PORT=${{ secrets.SPRING_LOCAL_PORT }} >> .env
+            echo SPRING_DOCKER_PORT=${{ secrets.SPRING_DOCKER_PORT }} >> .env
+            echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> .env
+            echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> .env
+
+      - name: Build and Start Docker-compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/lds-moeda-estudantil/codigo/back
+            docker-compose build --no-cache api
+            docker-compose up -d api
