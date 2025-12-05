@@ -61,6 +61,9 @@ public class TrocaService {
 
         String corpoEmailTroca = EmailUtils.gerarEmailResgateVantagem(aluno.getNome(), vantagem.getDescricao(), vantagem.getCusto(), imagemHtml, imgQrCodeHtml);
         emailService.enviarEmail(aluno.getEmail(), "\uD83C\uDF81 Sua vantagem foi resgatada com sucesso!",  corpoEmailTroca);
+
+        String corpoEmailAvisoParceiro = EmailUtils.gerarEmailAvisoParceiro(vantagem.getEmpresaParceira().getRazaoSocial(), aluno.getNome(), vantagem.getDescricao(), vantagem.getCusto());
+        emailService.enviarEmail(vantagem.getEmpresaParceira().getEmail(), "⚠️ Aviso de vantagem resgatada", corpoEmailAvisoParceiro);
     }
 
     @Transactional

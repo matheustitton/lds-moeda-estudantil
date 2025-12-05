@@ -305,4 +305,98 @@ public class EmailUtils {
             </html>
             """.formatted(nomeAluno, nomeVantagem, urlImagemVantagem, pontosUsados, urlQrCode);
     }
+
+    public static String gerarEmailAvisoParceiro(String nomeEmpresa, String nomeAluno, String nomeVantagem, int custoPontos) {
+        return """
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body {
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            background-color: #f4f6f8;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .container {
+                            background-color: #ffffff;
+                            max-width: 600px;
+                            margin: 40px auto;
+                            border-radius: 12px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                            overflow: hidden;
+                        }
+                        .header {
+                            background-color: #4CAF50;
+                            color: white;
+                            text-align: center;
+                            padding: 20px;
+                        }
+                        .header h1 {
+                            margin: 0;
+                            font-size: 24px;
+                        }
+                        .content {
+                            padding: 30px;
+                            color: #333;
+                            line-height: 1.6;
+                        }
+                        .content h2 {
+                            color: #4CAF50;
+                            margin-top: 0;
+                        }
+                        .resgate-info {
+                            background-color: #e8f5e9;
+                            border-left: 5px solid #4CAF50;
+                            padding: 15px;
+                            margin: 20px 0;
+                            font-size: 16px;
+                            color: #2e7d32;
+                        }
+                        .footer {
+                            text-align: center;
+                            font-size: 14px;
+                            color: #888;
+                            padding: 20px;
+                            background-color: #fafafa;
+                        }
+                        .footer a {
+                            color: #4CAF50;
+                            text-decoration: none;
+                            font-weight: bold;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>🎁 Nova vantagem resgatada!</h1>
+                        </div>
+
+                        <div class="content">
+                            <p>Olá, <strong>%s</strong>! 👋</p>
+
+                            <p>A equipe do <strong>Educa Coins</strong> informa que uma de suas vantagens foi resgatada por um aluno.</p>
+
+                            <div class="resgate-info">
+                                <p><strong>Vantagem:</strong> %s</p>
+                                <p><strong>Aluno:</strong> %s</p>
+                                <p><strong>Pontos utilizados:</strong> %d</p>
+                            </div>
+
+                            <p>Isso significa que o aluno já recebeu o comprovante de resgate com QRCode e poderá apresentar para realizar o uso da vantagem.</p>
+
+                            <p>Agradecemos por apoiar o programa e contribuir com benefícios reais que motivam os estudantes! 💚</p>
+
+                            <p>Com parceria,<br><strong>Equipe Educa Coins</strong></p>
+                        </div>
+
+                        <div class="footer">
+                            <p>Este é um e-mail automático. Para suporte, acesse o <a href="#">painel do parceiro</a>.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                """.formatted(nomeEmpresa, nomeVantagem, nomeAluno, custoPontos);
+    }
 }
