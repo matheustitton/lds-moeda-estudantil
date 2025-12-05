@@ -3,7 +3,7 @@ import { Utils } from "@/lib/utils/utils";
 import { ResponseDto } from "@/types/response";
 import api from "@/lib/axios";
 
-const BASE_PATH = "http://48.217.82.183:8080";
+const BASE_PATH = "";
 
 export async function requisicaoBase<T, E>(
   endpoint: string,
